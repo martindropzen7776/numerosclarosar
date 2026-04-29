@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Finanzas Claras · Saber a dónde se va tu plata cada mes · Tus Números Claros</title>
+    <meta name="description" content="Sistema simple en Excel para ordenar tus finanzas personales. Ingresos, gastos, ahorro y deudas en un solo lugar. Tutorial incluido. Garantía 7 días. $19.900 ARS pago único.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #fafaf9;
+            --bg-dark: #0a0e1a;
+            --bg-section: #ffffff;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --text-light: #94a3b8;
+            --accent: #0ea5e9;
+            --accent-hover: #0284c7;
+            --accent-soft: #e0f2fe;
+            --emerald: #10b981;
+            --emerald-soft: #d1fae5;
+            --amber: #f59e0b;
+            --border: #e2e8f0;
+            --border-strong: #cbd5e1;
+            --whatsapp: #25D366;
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.65; color: var(--text); background: var(--bg);
+            -webkit-font-smoothing: antialiased; font-size: 16px;
+        }
+        a { color: inherit; text-decoration: none; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+        /* HEADER (idéntico) */
+        .header {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(250, 250, 249, 0.85);
+            backdrop-filter: saturate(180%) blur(12px);
+            -webkit-backdrop-filter: saturate(180%) blur(12px);
+            border-bottom: 1px solid var(--border);
+        }
+        .nav { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+        .logo { display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 17px; letter-spacing: -0.3px; }
+        .logo-mark {
+            width: 36px; height: 36px;
+            background: var(--bg-dark); color: var(--accent);
+            border-radius: 9px; display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 14px;
+        }
+        .nav-links { display: flex; gap: 32px; align-items: center; }
+        .nav-links a { font-size: 15px; color: var(--text-muted); font-weight: 500; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--text); }
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 11px 20px; border-radius: 10px;
+            font-weight: 600; font-size: 15px;
+            transition: all 0.2s; cursor: pointer; border: none; white-space: nowrap;
+        }
+        .btn-primary { background: var(--bg-dark); color: white; }
+        .btn-primary:hover { background: #1e293b; transform: translateY(-1px); }
+        .btn-accent { background: var(--accent); color: white; }
+        .btn-accent:hover { background: var(--accent-hover); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(14, 165, 233, 0.3); }
+        .btn-whatsapp { background: var(--whatsapp); color: white; }
+        .btn-whatsapp:hover { background: #1da851; }
+        .btn-ghost { background: transparent; color: var(--text); border: 1.5px solid var(--border-strong); }
+        .btn-ghost:hover { background: var(--text); color: white; }
+        .btn-lg { padding: 16px 28px; font-size: 16px; border-radius: 12px; }
+
+        /* BREADCRUMB */
+        .breadcrumb { padding: 20px 0; font-size: 14px; color: var(--text-muted); }
+        .breadcrumb a:hover { color: var(--accent); }
+        .breadcrumb .sep { margin: 0 8px; opacity: 0.5; }
+        .breadcrumb .current { color: var(--text); font-weight: 500; }
+
+        /* HERO */
+        .hero-product {
+            padding: 40px 0 80px;
+            background: linear-gradient(180deg, var(--accent-soft) 0%, var(--bg) 100%);
+            position: relative; overflow: hidden;
+        }
+        .hero-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 64px; align-items: center; }
+        .badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 6px 14px; background: white; color: var(--accent);
+            border-radius: 100px; font-size: 13px; font-weight: 600;
+            margin-bottom: 24px; border: 1px solid var(--accent);
+        }
+        h1 {
+            font-size: clamp(36px, 5vw, 60px);
+            line-height: 1.05; letter-spacing: -1.8px;
+            font-weight: 800; margin-bottom: 24px;
+        }
+        h1 em { color: var(--accent); font-style: normal; font-weight: 800; }
+        .hero-sub {
+            font-size: 19px; color: var(--text-muted);
+            line-height: 1.6; margin-bottom: 32px;
+        }
+        .hero-price {
+            display: flex; align-items: baseline; gap: 12px; margin-bottom: 28px;
+            padding: 20px 24px; background: white;
+            border-radius: 14px; border: 1px solid var(--border);
+            box-shadow: var(--shadow-md);
+        }
+        .hero-price .amount { font-size: 38px; font-weight: 800; letter-spacing: -1px; }
+        .hero-price .currency { font-size: 14px; color: var(--text-muted); font-weight: 500; }
+        .hero-price .once { color: var(--emerald); font-size: 13px; font-weight: 700; padding: 4px 10px; background: var(--emerald-soft); border-radius: 6px; }
+        .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 28px; }
+        .hero-meta { display: flex; gap: 20px; flex-wrap: wrap; font-size: 14px; color: var(--text-muted); }
+        .hero-meta-item { display: flex; align-items: center; gap: 8px; }
+        .hero-meta-item svg { color: var(--emerald); flex-shrink: 0; }
+
+        /* Hero Mockup */
+        .hero-mockup {
+            background: white; border-radius: 16px;
+            box-shadow: var(--shadow-lg); padding: 32px;
+            border: 1px solid var(--border);
+        }
+        .mockup-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+        .mockup-title { font-size: 13px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+        .mockup-month { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+        .mockup-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 20px; }
+        .mockup-stat { padding: 16px; background: var(--bg); border-radius: 10px; }
+        .mockup-stat-label { font-size: 11px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+        .mockup-stat-value { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; font-variant-numeric: tabular-nums; }
+        .mockup-stat-trend { font-size: 11px; color: var(--emerald); font-weight: 600; margin-top: 4px; }
+        .mockup-stat-trend.down { color: #ef4444; }
+        .mockup-bars { padding: 16px; background: var(--bg); border-radius: 10px; margin-top: 12px; }
+        .mockup-bars-title { font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 12px; }
+        .mockup-bar { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 13px; }
+        .mockup-bar-label { width: 90px; color: var(--text); font-weight: 500; }
+        .mockup-bar-track { flex: 1; height: 8px; background: white; border-radius: 4px; overflow: hidden; }
+        .mockup-bar-fill { height: 100%; background: var(--accent); border-radius: 4px; }
+        .mockup-bar-value { font-size: 12px; color: var(--text-muted); font-weight: 600; font-variant-numeric: tabular-nums; }
+
+        /* SECTIONS */
+        section { padding: 96px 0; }
+        .section-eyebrow {
+            display: inline-block; font-size: 13px; font-weight: 700;
+            color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px;
+            margin-bottom: 14px;
+        }
+        h2 {
+            font-size: clamp(30px, 4vw, 46px);
+            line-height: 1.1; letter-spacing: -1px;
+            font-weight: 800; margin-bottom: 18px;
+        }
+        h2 em { color: var(--accent); font-style: normal; }
+        .section-lead { font-size: 18px; color: var(--text-muted); max-width: 720px; line-height: 1.6; }
+        .section-header { text-align: center; margin-bottom: 56px; }
+        .section-header .section-lead { margin: 0 auto; }
+
+        /* PAINS & SOLUTIONS */
+        .pain-section { background: var(--bg-section); }
+        .pain-block {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 48px; align-items: center;
+            padding: 56px 0; border-bottom: 1px solid var(--border);
+        }
+        .pain-block:last-child { border-bottom: none; }
+        .pain-block.reverse { direction: rtl; }
+        .pain-block.reverse > * { direction: ltr; }
+        .pain-num {
+            display: inline-block; padding: 4px 10px;
+            background: #fee2e2; color: #991b1b;
+            font-size: 12px; font-weight: 700;
+            border-radius: 6px; text-transform: uppercase; letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+        .pain-headline { font-size: 30px; font-weight: 800; letter-spacing: -0.7px; line-height: 1.15; margin-bottom: 16px; }
+        .pain-text { font-size: 16.5px; color: var(--text-muted); line-height: 1.65; margin-bottom: 24px; }
+        .solution-box {
+            background: white; border: 1.5px solid var(--accent);
+            border-radius: 14px; padding: 24px 28px;
+        }
+        .solution-label {
+            display: inline-flex; align-items: center; gap: 8px;
+            font-size: 12px; font-weight: 700; color: var(--accent);
+            text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px;
+        }
+        .solution-text { font-size: 15.5px; line-height: 1.65; color: var(--text); }
+        .solution-text strong { color: var(--text); }
+
+        .pain-visual {
+            background: linear-gradient(135deg, var(--accent-soft) 0%, white 100%);
+            border-radius: 18px; padding: 40px;
+            min-height: 280px;
+            display: flex; align-items: center; justify-content: center;
+            border: 1px solid var(--border);
+        }
+        .pain-visual-card {
+            background: white; padding: 24px; border-radius: 12px;
+            box-shadow: var(--shadow-md); width: 100%; max-width: 360px;
+        }
+        .visual-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px dashed var(--border); font-size: 14px; }
+        .visual-row:last-child { border-bottom: none; font-weight: 700; padding-top: 14px; }
+        .visual-row .label { color: var(--text-muted); }
+        .visual-row .value { font-weight: 600; font-variant-numeric: tabular-nums; }
+        .visual-row .value.in { color: var(--emerald); }
+        .visual-row .value.out { color: #ef4444; }
+        .visual-row .value.neutral { color: var(--text); }
+
+        /* WHAT'S INCLUDED */
+        .included-section { background: var(--bg-dark); color: white; }
+        .included-section h2 { color: white; }
+        .included-section .section-lead { color: #94a3b8; }
+        .included-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 56px; }
+        .included-item {
+            padding: 28px 32px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+        }
+        .included-item-icon {
+            width: 44px; height: 44px;
+            background: var(--accent); color: white;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 18px;
+        }
+        .included-item h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; color: white; letter-spacing: -0.3px; }
+        .included-item p { font-size: 14.5px; color: #cbd5e1; line-height: 1.6; }
+
+        /* HOW TO USE */
+        .how-section { background: var(--bg-section); }
+        .how-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 48px; }
+        .how-step {
+            text-align: left; padding: 28px;
+            background: var(--bg); border-radius: 14px;
+            border: 1px solid var(--border);
+        }
+        .how-num {
+            width: 36px; height: 36px; background: var(--accent); color: white;
+            border-radius: 50%; line-height: 36px; text-align: center;
+            font-weight: 800; font-size: 14px; margin-bottom: 16px;
+        }
+        .how-step h4 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+        .how-step p { font-size: 14px; color: var(--text-muted); line-height: 1.55; }
+
+        /* TESTIMONIAL HIGHLIGHT */
+        .testimonial-feature {
+            padding: 80px 0; background: var(--accent-soft);
+        }
+        .testimonial-feature-card {
+            max-width: 800px; margin: 0 auto; text-align: center;
+            background: white; border-radius: 20px; padding: 56px;
+            box-shadow: var(--shadow-lg);
+        }
+        .testimonial-feature-stars { color: var(--amber); font-size: 20px; letter-spacing: 4px; margin-bottom: 24px; }
+        .testimonial-feature-quote { font-size: 24px; font-weight: 600; line-height: 1.45; letter-spacing: -0.5px; margin-bottom: 32px; color: var(--text); }
+        .testimonial-feature-author { display: flex; align-items: center; gap: 16px; justify-content: center; }
+        .testimonial-feature-avatar {
+            width: 56px; height: 56px;
+            background: var(--accent); color: white;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 18px;
+        }
+        .testimonial-feature-meta { text-align: left; }
+        .testimonial-feature-name { font-weight: 700; font-size: 16px; }
+        .testimonial-feature-role { color: var(--text-muted); font-size: 14px; }
+
+        /* PRICE & GUARANTEE */
+        .price-section { background: var(--bg); padding: 80px 0; }
+        .price-card {
+            max-width: 600px; margin: 0 auto;
+            background: white; border-radius: 20px;
+            padding: 56px 48px; text-align: center;
+            box-shadow: var(--shadow-lg); border: 1px solid var(--border);
+            position: relative;
+        }
+        .price-eyebrow { font-size: 13px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; }
+        .price-title { font-size: 32px; font-weight: 800; letter-spacing: -0.7px; margin-bottom: 8px; }
+        .price-value { display: flex; align-items: baseline; justify-content: center; gap: 10px; margin: 32px 0 8px; }
+        .price-value .amount { font-size: 64px; font-weight: 900; letter-spacing: -2.5px; line-height: 1; }
+        .price-value .currency { font-size: 18px; color: var(--text-muted); font-weight: 600; }
+        .price-once-label { color: var(--emerald); font-weight: 700; font-size: 14px; margin-bottom: 32px; padding: 6px 14px; background: var(--emerald-soft); border-radius: 100px; display: inline-block; }
+        .price-includes {
+            text-align: left; margin: 32px 0;
+            padding: 24px; background: var(--bg);
+            border-radius: 12px;
+        }
+        .price-includes h4 { font-size: 13px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 14px; }
+        .price-includes ul { list-style: none; padding: 0; }
+        .price-includes li { padding: 8px 0; display: flex; gap: 10px; align-items: flex-start; font-size: 14.5px; }
+        .price-includes svg { color: var(--emerald); flex-shrink: 0; margin-top: 3px; }
+        .price-cta { width: 100%; justify-content: center; }
+        .price-meta { margin-top: 20px; font-size: 13px; color: var(--text-muted); }
+
+        .guarantee-bar {
+            margin-top: 32px;
+            display: flex; align-items: center; gap: 20px;
+            padding: 20px 28px;
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 14px; max-width: 600px; margin-left: auto; margin-right: auto;
+        }
+        .guarantee-bar-seal {
+            width: 60px; height: 60px;
+            background: var(--bg-dark); color: var(--amber);
+            border-radius: 50%;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 18px; flex-shrink: 0;
+            border: 3px solid white;
+        }
+        .guarantee-bar-text { text-align: left; }
+        .guarantee-bar-text strong { display: block; font-size: 15px; color: #78350f; margin-bottom: 4px; }
+        .guarantee-bar-text span { font-size: 13.5px; color: #92400e; line-height: 1.5; }
+
+        /* FAQ */
+        .faq { background: var(--bg-section); }
+        .faq-list { max-width: 800px; margin: 48px auto 0; }
+        .faq-item {
+            background: var(--bg); border: 1px solid var(--border);
+            border-radius: 12px; margin-bottom: 12px; overflow: hidden;
+        }
+        .faq-q {
+            padding: 22px 26px; font-weight: 600; font-size: 16px;
+            cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+            list-style: none; user-select: none;
+        }
+        .faq-q::-webkit-details-marker { display: none; }
+        .faq-q::after { content: '+'; font-size: 24px; color: var(--text-muted); font-weight: 300; transition: transform 0.2s; }
+        .faq-item[open] .faq-q::after { transform: rotate(45deg); color: var(--accent); }
+        .faq-a { padding: 0 26px 22px; color: var(--text-muted); line-height: 1.65; font-size: 15.5px; }
+
+        /* FINAL CTA */
+        .final-cta {
+            background: var(--bg-dark); color: white;
+            text-align: center; padding: 100px 24px;
+            position: relative; overflow: hidden;
+        }
+        .final-cta::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(ellipse 800px 400px at center, rgba(14, 165, 233, 0.15), transparent);
+        }
+        .final-cta-inner { position: relative; z-index: 1; max-width: 700px; margin: 0 auto; }
+        .final-cta h2 { color: white; }
+        .final-cta p { font-size: 18px; color: #cbd5e1; margin-bottom: 36px; }
+        .final-cta .btn-accent { box-shadow: 0 12px 32px rgba(14, 165, 233, 0.4); }
+        .final-cta-meta { margin-top: 24px; font-size: 14px; color: #94a3b8; }
+        .final-cta-meta strong { color: var(--accent); }
+
+        /* FOOTER */
+        .footer { background: var(--bg-dark); color: #94a3b8; padding: 64px 0 32px; }
+        .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+        .footer-brand .logo { color: white; margin-bottom: 16px; }
+        .footer-brand p { font-size: 14px; line-height: 1.6; max-width: 320px; }
+        .footer-col h4 { color: white; font-size: 14px; font-weight: 600; margin-bottom: 18px; }
+        .footer-col ul { list-style: none; padding: 0; }
+        .footer-col li { padding: 6px 0; font-size: 14px; }
+        .footer-col li a:hover { color: white; }
+        .footer-bottom { padding-top: 32px; border-top: 1px solid rgba(255, 255, 255, 0.06); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; font-size: 13px; }
+
+        /* WhatsApp float */
+        .whatsapp-float {
+            position: fixed; bottom: 24px; right: 24px; z-index: 50;
+            width: 60px; height: 60px;
+            background: var(--whatsapp); color: white;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 8px 24px rgba(37, 211, 102, 0.4);
+            transition: all 0.3s;
+        }
+        .whatsapp-float:hover { transform: scale(1.1) rotate(-8deg); }
+
+        @media (max-width: 900px) {
+            .nav-links { display: none; }
+            .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+            .pain-block { grid-template-columns: 1fr; gap: 32px; padding: 40px 0; }
+            .pain-block.reverse { direction: ltr; }
+            .how-grid { grid-template-columns: 1fr 1fr; }
+            .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+            section { padding: 64px 0; }
+            .testimonial-feature-card { padding: 40px 28px; }
+            .testimonial-feature-quote { font-size: 19px; }
+            .price-card { padding: 40px 28px; }
+            .price-value .amount { font-size: 48px; }
+        }
+        @media (max-width: 540px) {
+            .how-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr; }
+            .hero-ctas .btn { width: 100%; justify-content: center; }
+            .guarantee-bar { flex-direction: column; text-align: center; }
+            .guarantee-bar-text { text-align: center; }
+        }
+
+        .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s ease, transform 0.7s ease; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="index.html" class="logo">
+                    <div class="logo-mark">TN</div>
+                    <span>Tus Números Claros</span>
+                </a>
+                <div class="nav-links">
+                    <a href="index.html#productos">Sistemas</a>
+                    <a href="index.html#como-funciona">Cómo funciona</a>
+                    <a href="index.html#testimonios">Casos reales</a>
+                    <a href="#preguntas">Preguntas</a>
+                </div>
+                <a href="https://wa.me/5491100000000" class="btn btn-accent">Hablar por WhatsApp</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- BREADCRUMB -->
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="index.html">Inicio</a>
+            <span class="sep">/</span>
+            <a href="index.html#productos">Sistemas</a>
+            <span class="sep">/</span>
+            <span class="current">Finanzas Claras</span>
+        </div>
+    </div>
+
+    <!-- HERO -->
+    <section class="hero-product">
+        <div class="container">
+            <div class="hero-grid">
+                <div>
+                    <span class="badge">● Para finanzas personales</span>
+                    <h1>Saber a dónde se va tu plata, <em>cada mes</em>.</h1>
+                    <p class="hero-sub">Finanzas Claras es un sistema simple en Excel para ordenar ingresos, gastos, ahorro y deudas. Sin Excel avanzado, sin curso de 6 horas. En menos de 60 minutos ya estás viendo tu plata clara.</p>
+
+                    <div class="hero-price">
+                        <span class="amount">$19.900</span>
+                        <span class="currency">ARS</span>
+                        <span class="once">PAGO ÚNICO</span>
+                    </div>
+
+                    <div class="hero-ctas">
+                        <a href="https://wa.me/5491100000000?text=Hola%2C%20quiero%20Finanzas%20Claras" class="btn btn-accent btn-lg">Quiero Finanzas Claras →</a>
+                        <a href="https://wa.me/5491100000000?text=Hola%20Fede%2C%20tengo%20una%20pregunta%20sobre%20Finanzas%20Claras" class="btn btn-ghost btn-lg">Tengo una duda</a>
+                    </div>
+
+                    <div class="hero-meta">
+                        <div class="hero-meta-item">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+                            <span>Garantía 7 días</span>
+                        </div>
+                        <div class="hero-meta-item">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+                            <span>Tutorial en video (35 min)</span>
+                        </div>
+                        <div class="hero-meta-item">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+                            <span>Soporte WhatsApp 30 días</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hero-mockup">
+                    <div class="mockup-header">
+                        <span class="mockup-title">Resumen Personal</span>
+                        <span class="mockup-month">Abril 2026</span>
+                    </div>
+                    <div class="mockup-grid">
+                        <div class="mockup-stat">
+                            <div class="mockup-stat-label">Ingresos</div>
+                            <div class="mockup-stat-value">$840K</div>
+                            <div class="mockup-stat-trend">+12% vs marzo</div>
+                        </div>
+                        <div class="mockup-stat">
+                            <div class="mockup-stat-label">Gastos</div>
+                            <div class="mockup-stat-value">$520K</div>
+                            <div class="mockup-stat-trend down">+5% vs marzo</div>
+                        </div>
+                        <div class="mockup-stat">
+                            <div class="mockup-stat-label">Ahorrado</div>
+                            <div class="mockup-stat-value">$180K</div>
+                            <div class="mockup-stat-trend">Meta 60%</div>
+                        </div>
+                        <div class="mockup-stat">
+                            <div class="mockup-stat-label">Deudas</div>
+                            <div class="mockup-stat-value">3 cuotas</div>
+                            <div class="mockup-stat-trend">−1 vs marzo</div>
+                        </div>
+                    </div>
+                    <div class="mockup-bars">
+                        <div class="mockup-bars-title">¿Dónde se va tu plata?</div>
+                        <div class="mockup-bar">
+                            <span class="mockup-bar-label">Vivienda</span>
+                            <div class="mockup-bar-track"><div class="mockup-bar-fill" style="width: 70%; background: #0ea5e9;"></div></div>
+                            <span class="mockup-bar-value">$210K</span>
+                        </div>
+                        <div class="mockup-bar">
+                            <span class="mockup-bar-label">Comida</span>
+                            <div class="mockup-bar-track"><div class="mockup-bar-fill" style="width: 50%; background: #38bdf8;"></div></div>
+                            <span class="mockup-bar-value">$140K</span>
+                        </div>
+                        <div class="mockup-bar">
+                            <span class="mockup-bar-label">Transporte</span>
+                            <div class="mockup-bar-track"><div class="mockup-bar-fill" style="width: 30%; background: #7dd3fc;"></div></div>
+                            <span class="mockup-bar-value">$85K</span>
+                        </div>
+                        <div class="mockup-bar">
+                            <span class="mockup-bar-label">Servicios</span>
+                            <div class="mockup-bar-track"><div class="mockup-bar-fill" style="width: 25%; background: #bae6fd;"></div></div>
+                            <span class="mockup-bar-value">$60K</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PAINS -->
+    <section class="pain-section">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-eyebrow">Para vos si...</span>
+                <h2>4 dolores que conocemos<br>de memoria.</h2>
+                <p class="section-lead">Si te sentís identificado con uno o más, este sistema fue diseñado para vos. Cada dolor tiene una solución concreta adentro del Excel.</p>
+            </div>
+
+            <!-- PAIN 1 -->
+            <div class="pain-block reveal">
+                <div>
+                    <span class="pain-num">Dolor 1</span>
+                    <h3 class="pain-headline">Llegás a fin de mes y no tenés idea en qué se te fue la plata.</h3>
+                    <p class="pain-text">Cobrás. Pagás cosas. Te quedan dos mangos. Mirás el resumen del banco y no entendés nada — porque no recordás qué fue cada gasto, ni si fue tuyo o del negocio. La sensación es que ganás bien pero algo te lo come, y no sabés qué.</p>
+                    <div class="solution-box">
+                        <div class="solution-label">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+                            Cómo lo resuelve Finanzas Claras
+                        </div>
+                        <p class="solution-text"><strong>Categorización automática de gastos.</strong> Cargás cada movimiento una sola vez y el sistema lo agrupa por categoría: vivienda, comida, transporte, salidas, servicios. A fin de mes ves el desglose real con porcentajes y montos. La sorpresa es siempre la misma: <em>nunca era lo que vos creías</em>.</p>
+                    </div>
+                </div>
+                <div class="pain-visual">
+                    <div class="pain-visual-card">
+                        <div class="visual-row"><span class="label">🏠 Vivienda (25%)</span><span class="value neutral">$210.000</span></div>
+                        <div class="visual-row"><span class="label">🛒 Supermercado (16%)</span><span class="value neutral">$140.000</span></div>
+                        <div class="visual-row"><span class="label">🚗 Transporte (10%)</span><span class="value neutral">$85.000</span></div>
+                        <div class="visual-row"><span class="label">📺 Suscripciones (9%)</span><span class="value out">$76.500</span></div>
+                        <div class="visual-row"><span class="label">🍕 Salidas (7%)</span><span class="value out">$58.000</span></div>
+                        <div class="visual-row"><span class="label">⚡ Otros (33%)</span><span class="value neutral">$280.500</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAIN 2 -->
+            <div class="pain-block reverse reveal">
+                <div>
+                    <span class="pain-num">Dolor 2</span>
+                    <h3 class="pain-headline">Mezclás la plata del negocio con la personal y no sabés cuánta sacaste.</h3>
+                    <p class="pain-text">Sacás del cajón para pagar el supermercado. Cobrás un cliente y lo dejás en tu billetera personal. Lo del negocio y lo tuyo es la misma cosa, y a fin de año descubrís que te llevaste el doble de lo que el negocio podía bancar. Y sentís que no podés ahorrar porque "la plata no alcanza".</p>
+                    <div class="solution-box">
+                        <div class="solution-label">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+                            Cómo lo resuelve Finanzas Claras
+                        </div>
+                        <p class="solution-text"><strong>Pestañas separadas con totalizador automático.</strong> Cada movimiento se marca como "personal" o "del negocio". El sistema te muestra cuánto te llevaste del negocio cada mes, así dejás de adivinar. <em>Si tenés también el sistema Negocio Rentable, los dos se complementan.</em></p>
+                    </div>
+                </div>
+                <div class="pain-visual">
+                    <div class="pain-visual-card">
+                        <div style="font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;">Resumen mensual</div>
+                        <div class="visual-row"><span class="label">💼 Sueldo del negocio</span><span class="value in">+$520.000</span></div>
+                        <div class="visual-row"><span class="label">💸 Retiros extra del negocio</span><span class="value out">−$180.000</span></div>
+                        <div class="visual-row"><span class="label">🏠 Gastos personales</span><span class="value out">−$520.000</span></div>
+                        <div class="visual-row"><span class="label">💰 Ahorro del mes</span><span class="value in">+$0</span></div>
+                        <div class="visual-row"><span class="label" style="color: var(--accent); font-weight: 700;">⚠️ Sacaste de más</span><span class="value out">−$180.000</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAIN 3 -->
+            <div class="pain-block reveal">
+                <div>
+                    <span class="pain-num">Dolor 3</span>
+                    <h3 class="pain-headline">Te propusiste ahorrar este año. Estamos en abril y no llevás la cuenta.</h3>
+                    <p class="pain-text">No es por falta de fuerza de voluntad — el problema es que el ahorro nunca tiene un lugar concreto. No tenés un objetivo claro, no medís el avance, no ves cuánto te falta para llegar. Entonces siempre va último, después de todo lo demás.</p>
+                    <div class="solution-box">
+                        <div class="solution-label">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+                            Cómo lo resuelve Finanzas Claras
+                        </div>
+                        <p class="solution-text"><strong>Plan de ahorro con metas + tracker mensual.</strong> Definís una meta (vacaciones, auto, fondo de emergencia) con monto y fecha. El sistema te dice cuánto necesitás separar cada mes y muestra una barra de avance. Ver el progreso es lo que mantiene el hábito.</p>
+                    </div>
+                </div>
+                <div class="pain-visual">
+                    <div class="pain-visual-card">
+                        <div style="font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;">Mis metas de ahorro</div>
+                        <div style="margin-bottom: 16px;">
+                            <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 6px;"><strong>🏖️ Vacaciones (Dic)</strong><span style="color: var(--text-muted);">$280K / $600K</span></div>
+                            <div style="height: 10px; background: var(--bg); border-radius: 5px; overflow: hidden;"><div style="height: 100%; width: 47%; background: var(--accent); border-radius: 5px;"></div></div>
+                        </div>
+                        <div style="margin-bottom: 16px;">
+                            <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 6px;"><strong>💻 Notebook nueva</strong><span style="color: var(--text-muted);">$150K / $400K</span></div>
+                            <div style="height: 10px; background: var(--bg); border-radius: 5px; overflow: hidden;"><div style="height: 100%; width: 38%; background: var(--accent); border-radius: 5px;"></div></div>
+                        </div>
+                        <div>
+                            <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 6px;"><strong>🛟 Fondo emergencia</strong><span style="color: var(--text-muted);">$420K / $500K</span></div>
+                            <div style="height: 10px; background: var(--bg); border-radius: 5px; overflow: hidden;"><div style="height: 100%; width: 84%; background: var(--emerald); border-radius: 5px;"></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAIN 4 -->
+            <div class="pain-block reverse reveal">
+                <div>
+                    <span class="pain-num">Dolor 4</span>
+                    <h3 class="pain-headline">Tenés varias cuotas activas y no sabés cuándo se libera la primera.</h3>
+                    <p class="pain-text">El celular te avisa cuando vence cada cuota — pero no te avisa cuándo se TERMINA. Y por eso seguís sintiéndote endeudado meses después de haber pagado todo. La sensación de "le debo a alguien" no se va, aunque la deuda real sí.</p>
+                    <div class="solution-box">
+                        <div class="solution-label">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+                            Cómo lo resuelve Finanzas Claras
+                        </div>
+                        <p class="solution-text"><strong>Calendario de deudas y cuotas con fecha de liberación.</strong> Cargás cada préstamo o cuota y el sistema te muestra el calendario completo: cuánto pagás por mes, cuándo se libera cada cuota, y cuánta plata vas a tener disponible mes a mes cuando se vayan terminando.</p>
+                    </div>
+                </div>
+                <div class="pain-visual">
+                    <div class="pain-visual-card">
+                        <div style="font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;">Calendario de cuotas</div>
+                        <div class="visual-row"><span class="label">📱 Celular Visa</span><span style="color: var(--accent); font-weight: 600;">se libera mayo</span></div>
+                        <div class="visual-row"><span class="label">🛋️ Sillón cuotas</span><span style="color: var(--text-muted); font-weight: 600;">3 cuotas más</span></div>
+                        <div class="visual-row"><span class="label">🚗 Cubiertas</span><span style="color: var(--text-muted); font-weight: 600;">5 cuotas más</span></div>
+                        <div class="visual-row"><span class="label">💳 Préstamo banco</span><span style="color: var(--text-muted); font-weight: 600;">12 cuotas más</span></div>
+                        <div class="visual-row" style="background: var(--accent-soft); margin: 12px -16px -16px; padding: 14px 16px; border-radius: 0 0 12px 12px;"><span class="label" style="font-weight: 700;">💰 Plata libre en julio</span><span style="color: var(--accent); font-weight: 800;">+$28.500/mes</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHAT'S INCLUDED -->
+    <section class="included-section">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-eyebrow">Lo que viene adentro</span>
+                <h2>Todo lo que recibís cuando comprás.</h2>
+                <p class="section-lead">No es solo un Excel — es un sistema completo con tutorial, ejemplo cargado y soporte humano por WhatsApp.</p>
+            </div>
+            <div class="included-grid reveal">
+                <div class="included-item">
+                    <div class="included-item-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    </div>
+                    <h3>Sistema Excel completo</h3>
+                    <p>Archivo .xlsx listo para usar en Excel o Google Sheets. Fórmulas armadas y bloqueadas para que no las rompas sin querer.</p>
+                </div>
+                <div class="included-item">
+                    <div class="included-item-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg>
+                    </div>
+                    <h3>Tutorial en video (35 min)</h3>
+                    <p>Te explico paso a paso cómo cargar tus datos, qué significa cada número y cómo leer los resultados.</p>
+                </div>
+                <div class="included-item">
+                    <div class="included-item-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                    </div>
+                    <h3>Soporte WhatsApp 30 días</h3>
+                    <p>Si te trabás con algo, me escribís y te ayudo yo. Persona real, no bot. Después podés extender el soporte si querés.</p>
+                </div>
+                <div class="included-item">
+                    <div class="included-item-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                    </div>
+                    <h3>Ejemplo cargado</h3>
+                    <p>Viene con un caso real adentro para que veas exactamente cómo funciona antes de cargar tus datos.</p>
+                </div>
+                <div class="included-item">
+                    <div class="included-item-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+                    </div>
+                    <h3>Plan de ahorro con metas</h3>
+                    <p>Definís objetivos, el sistema te dice cuánto separar por mes y muestra el avance visual. Cambia cómo te relacionás con el ahorro.</p>
+                </div>
+                <div class="included-item">
+                    <div class="included-item-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                    </div>
+                    <h3>Dashboard mensual y anual</h3>
+                    <p>Una vista rápida que te muestra todos los números importantes. Lo abrís y entendés tu situación en 30 segundos.</p>
+                </div>
+                <div class="included-item">
+                    <div class="included-item-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+                    </div>
+                    <h3>Actualizaciones gratis</h3>
+                    <p>Lo comprás una vez. Cuando saquemos versiones nuevas, te las pasamos gratis al mismo mail con el que compraste.</p>
+                </div>
+                <div class="included-item">
+                    <div class="included-item-icon">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L4 7v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V7l-8-5z"/></svg>
+                    </div>
+                    <h3>Garantía 7 días total</h3>
+                    <p>Si en 7 días no te convence, me escribís y te devuelvo el 100%. Sin preguntas, sin letra chica.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW TO USE -->
+    <section class="how-section">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-eyebrow">Cómo se usa</span>
+                <h2>De confundido a claro<br>en 4 pasos.</h2>
+            </div>
+            <div class="how-grid reveal">
+                <div class="how-step">
+                    <div class="how-num">1</div>
+                    <h4>Comprás y recibís</h4>
+                    <p>Pagás por MercadoPago o transferencia. Te llega todo al mail en menos de 5 minutos.</p>
+                </div>
+                <div class="how-step">
+                    <div class="how-num">2</div>
+                    <h4>Mirás el tutorial</h4>
+                    <p>35 minutos. Vas con el video y vas haciendo. Termina y ya sabés todo lo necesario.</p>
+                </div>
+                <div class="how-step">
+                    <div class="how-num">3</div>
+                    <h4>Cargás tu mes actual</h4>
+                    <p>Ingresos, gastos, deudas, metas de ahorro. Una hora la primera vez, después 15 min/mes.</p>
+                </div>
+                <div class="how-step">
+                    <div class="how-num">4</div>
+                    <h4>Ves tus números claros</h4>
+                    <p>El dashboard se arma solo. Sabés en qué se va tu plata y cuánto tenés para ahorrar.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIAL FEATURE -->
+    <section class="testimonial-feature">
+        <div class="container">
+            <div class="testimonial-feature-card reveal">
+                <div class="testimonial-feature-stars">★★★★★</div>
+                <p class="testimonial-feature-quote">"Lo que más me sirvió fue saber cuánto sacaba del negocio cada mes para mí. Antes lo hacía a ojo y a fin de año me daba cuenta que me había llevado el doble de lo que el negocio bancaba. Ahora veo el número en pantalla y me ordena todo."</p>
+                <div class="testimonial-feature-author">
+                    <div class="testimonial-feature-avatar">CM</div>
+                    <div class="testimonial-feature-meta">
+                        <div class="testimonial-feature-name">Carolina M.</div>
+                        <div class="testimonial-feature-role">Estudio contable · CABA</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICE SECTION -->
+    <section class="price-section">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-eyebrow">Pago único</span>
+                <h2>Lo comprás una vez.<br>Es tuyo para siempre.</h2>
+            </div>
+            <div class="price-card reveal">
+                <div class="price-eyebrow">Sistema Finanzas Claras</div>
+                <h3 class="price-title">Para ordenar tu plata personal</h3>
+                <div class="price-value">
+                    <span class="amount">$19.900</span>
+                    <span class="currency">ARS</span>
+                </div>
+                <span class="price-once-label">✓ Pago único · No es suscripción</span>
+
+                <div class="price-includes">
+                    <h4>Incluye:</h4>
+                    <ul>
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Sistema Excel completo (compatible Google Sheets)</li>
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Tutorial en video (35 min)</li>
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Ejemplo cargado para que veas cómo funciona</li>
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Plan de ahorro con metas y avance visual</li>
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Calendario de deudas y cuotas</li>
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Dashboard mensual y anual</li>
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Soporte por WhatsApp 30 días</li>
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Actualizaciones gratis de por vida</li>
+                    </ul>
+                </div>
+
+                <a href="https://wa.me/5491100000000?text=Hola%2C%20quiero%20Finanzas%20Claras" class="btn btn-accent btn-lg price-cta">Comprar Finanzas Claras →</a>
+                <div class="price-meta">MercadoPago · Transferencia · Tarjeta · Recibís todo en 5 minutos</div>
+            </div>
+
+            <div class="guarantee-bar reveal">
+                <div class="guarantee-bar-seal"><div>7</div><div style="font-size: 9px; letter-spacing: 1px;">DÍAS</div></div>
+                <div class="guarantee-bar-text">
+                    <strong>Garantía total de 7 días</strong>
+                    <span>Si no cambia cómo ves tu plata, te devuelvo el 100%. Sin preguntas raras ni letra chica.</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq" id="preguntas">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-eyebrow">Preguntas frecuentes</span>
+                <h2>Lo que más nos preguntan<br>sobre Finanzas Claras.</h2>
+            </div>
+            <div class="faq-list reveal">
+                <details class="faq-item">
+                    <summary class="faq-q">¿Sirve si no tengo un negocio, solo soy empleado?</summary>
+                    <div class="faq-a">Totalmente. Finanzas Claras está pensado para ordenar tus finanzas personales — sirvas seas empleado, autónomo, monotributista, freelancer, jubilado, o cualquier combinación. Si tenés ingresos y gastos, este sistema te ordena.</div>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-q">Existen plantillas de ahorro gratis en Pinterest. ¿Para qué pagar?</summary>
+                    <div class="faq-a">Las plantillas gratis son bonitas pero la mayoría te dejan solo. Acá pagás por: tutorial en video que te guía paso a paso, ejemplo cargado para que entiendas cómo funciona, soporte por WhatsApp si te trabás, y la garantía de que está pensado para ingresos y gastos argentinos. Las plantillas gratis no tienen ninguna de esas cuatro cosas.</div>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-q">¿Necesito saber Excel?</summary>
+                    <div class="faq-a">No. Si sabés escribir un número en una celda, ya sabés lo suficiente. Las fórmulas están armadas y bloqueadas. El tutorial te muestra cada paso. Sebastián, uno de nuestros clientes, dijo "tenía nivel cero de Excel y en una tarde ya tenía todo cargado".</div>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-q">¿Cuánto tiempo me lleva por mes?</summary>
+                    <div class="faq-a">La primera carga (cuando arrancás) te lleva alrededor de una hora. Después, entre 15 y 30 minutos por mes para mantener todo al día. Lo ideal es cargar cada pocos días para que no se acumule — con la práctica se vuelve automático.</div>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-q">¿Puedo separar la plata personal de la del negocio?</summary>
+                    <div class="faq-a">Sí. Cada movimiento se etiqueta como personal o del negocio, y el sistema te muestra cuánto sacaste del negocio cada mes. Si querés además ver la rentabilidad del negocio en sí, ese es el sistema Negocio Rentable (también disponible, o en combo con 25% off).</div>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-q">¿Qué pasa si compro y no lo uso?</summary>
+                    <div class="faq-a">Tenés 7 días de garantía total. Si en una semana no le encontrás la vuelta o no es lo que esperabas, me escribís por WhatsApp y te devuelvo el 100%. Sin preguntas, sin letra chica.</div>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-q">¿Hay un solo pago o es suscripción?</summary>
+                    <div class="faq-a">Pago único. Lo comprás una vez y es tuyo para siempre. Las actualizaciones que vayan saliendo te las paso gratis.</div>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-q">¿Cómo recibo el sistema?</summary>
+                    <div class="faq-a">Te llega un mail con el archivo Excel, el link al video tutorial y un PDF con la guía rápida. Todo en tu casilla en menos de 5 minutos después del pago confirmado.</div>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-q">¿Qué métodos de pago aceptan?</summary>
+                    <div class="faq-a">MercadoPago (con cuotas sin interés según promoción), transferencia bancaria, y todas las tarjetas. Coordinamos por WhatsApp el método que mejor te quede.</div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="final-cta">
+        <div class="final-cta-inner">
+            <h2>Hoy es buen día para empezar a ver tu plata clara.</h2>
+            <p>$19.900 pago único. Garantía 7 días. Tutorial incluido. Y si te trabás, te respondo yo por WhatsApp.</p>
+            <a href="https://wa.me/5491100000000?text=Hola%2C%20quiero%20Finanzas%20Claras" class="btn btn-accent btn-lg">Quiero Finanzas Claras →</a>
+            <div class="final-cta-meta"><strong>Pago único</strong> · MercadoPago · Transferencia · Tarjeta · Llega en 5 min al mail</div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo">
+                        <div class="logo-mark">TN</div>
+                        <span style="color: white;">Tus Números Claros</span>
+                    </a>
+                    <p>Sistemas simples para que entiendas las finanzas de tu negocio sin volverte loco con Excel ni con cursos eternos.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Sistemas</h4>
+                    <ul>
+                        <li><a href="finanzas-claras.html">Finanzas Claras</a></li>
+                        <li><a href="negocio-rentable.html">Negocio Rentable</a></li>
+                        <li><a href="https://wa.me/5491100000000">Combo completo</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Recursos</h4>
+                    <ul>
+                        <li><a href="index.html#como-funciona">Cómo funciona</a></li>
+                        <li><a href="#preguntas">Preguntas frecuentes</a></li>
+                        <li><a href="index.html#testimonios">Casos reales</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#">Términos y condiciones</a></li>
+                        <li><a href="#">Política de privacidad</a></li>
+                        <li><a href="#">Política de devoluciones</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>© 2026 Tus Números Claros. Hecho en Argentina.</span>
+                <span>Soporte: <a href="https://wa.me/5491100000000" style="color: var(--accent);">WhatsApp</a></span>
+            </div>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/5491100000000?text=Hola%2C%20quiero%20Finanzas%20Claras" class="whatsapp-float" aria-label="Hablar por WhatsApp">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893A11.821 11.821 0 0020.464 3.488"/></svg>
+    </a>
+
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+        }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+
+</body>
+</html>

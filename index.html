@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tus Números Claros · Entendé tu plata sin volverte loco con Excel</title>
+    <meta name="description" content="Sistemas simples en Excel para ordenar tus finanzas personales y entender la rentabilidad real de tu negocio. Hecho en Argentina. Soporte por WhatsApp con persona real. Garantía 7 días.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #fafaf9;
+            --bg-dark: #0a0e1a;
+            --bg-section: #ffffff;
+            --bg-warm: #fef3c7;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --text-light: #94a3b8;
+            --accent: #f59e0b;
+            --accent-hover: #d97706;
+            --accent-soft: #fef3c7;
+            --emerald: #10b981;
+            --emerald-soft: #d1fae5;
+            --border: #e2e8f0;
+            --border-strong: #cbd5e1;
+            --whatsapp: #25D366;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.08);
+            --shadow-card: 0 1px 3px rgba(15, 23, 42, 0.04), 0 12px 32px rgba(15, 23, 42, 0.06);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.65;
+            color: var(--text);
+            background: var(--bg);
+            -webkit-font-smoothing: antialiased;
+            font-size: 16px;
+        }
+        a { color: inherit; text-decoration: none; }
+        img { max-width: 100%; display: block; }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+        /* HEADER */
+        .header {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(250, 250, 249, 0.85);
+            backdrop-filter: saturate(180%) blur(12px);
+            -webkit-backdrop-filter: saturate(180%) blur(12px);
+            border-bottom: 1px solid var(--border);
+        }
+        .nav { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+        .logo { display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 17px; letter-spacing: -0.3px; }
+        .logo-mark {
+            width: 36px; height: 36px;
+            background: var(--bg-dark); color: var(--accent);
+            border-radius: 9px;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 14px; letter-spacing: -0.5px;
+        }
+        .nav-links { display: flex; gap: 32px; align-items: center; }
+        .nav-links a { font-size: 15px; color: var(--text-muted); font-weight: 500; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--text); }
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 11px 20px; border-radius: 10px;
+            font-weight: 600; font-size: 15px;
+            transition: all 0.2s; cursor: pointer;
+            border: none; white-space: nowrap;
+        }
+        .btn-primary {
+            background: var(--bg-dark); color: white;
+        }
+        .btn-primary:hover { background: #1e293b; transform: translateY(-1px); }
+        .btn-accent {
+            background: var(--accent); color: var(--bg-dark);
+        }
+        .btn-accent:hover { background: var(--accent-hover); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(245, 158, 11, 0.3); }
+        .btn-whatsapp {
+            background: var(--whatsapp); color: white;
+        }
+        .btn-whatsapp:hover { background: #1da851; transform: translateY(-1px); }
+        .btn-ghost {
+            background: transparent; color: var(--text); border: 1.5px solid var(--border-strong);
+        }
+        .btn-ghost:hover { background: var(--text); color: white; border-color: var(--text); }
+        .btn-lg { padding: 16px 28px; font-size: 16px; border-radius: 12px; }
+
+        /* HERO */
+        .hero {
+            padding: 96px 0 80px;
+            background: linear-gradient(180deg, var(--bg) 0%, #fff 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::before {
+            content: ''; position: absolute; inset: 0;
+            background-image:
+                radial-gradient(ellipse 800px 400px at 20% -10%, rgba(245, 158, 11, 0.08), transparent),
+                radial-gradient(ellipse 600px 300px at 80% 0%, rgba(16, 185, 129, 0.06), transparent);
+            pointer-events: none;
+        }
+        .hero-inner { position: relative; z-index: 1; text-align: center; }
+        .badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 6px 14px; background: var(--accent-soft); color: #92400e;
+            border-radius: 100px; font-size: 13px; font-weight: 600;
+            margin-bottom: 28px; border: 1px solid #fde68a;
+        }
+        .badge-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; animation: pulse 2s infinite; }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.3); }
+        }
+        h1 {
+            font-size: clamp(40px, 6vw, 72px);
+            line-height: 1.05; letter-spacing: -2px;
+            font-weight: 800; margin-bottom: 24px;
+            max-width: 900px; margin-left: auto; margin-right: auto;
+        }
+        h1 em { color: var(--accent); font-style: normal; font-weight: 800; }
+        .hero-sub {
+            font-size: clamp(17px, 2vw, 21px);
+            color: var(--text-muted); font-weight: 400;
+            max-width: 680px; margin: 0 auto 40px;
+            line-height: 1.55;
+        }
+        .hero-ctas { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; margin-bottom: 48px; }
+        .hero-trust {
+            display: flex; gap: 32px; justify-content: center; align-items: center;
+            flex-wrap: wrap; padding-top: 36px; border-top: 1px solid var(--border);
+            max-width: 900px; margin: 0 auto;
+        }
+        .trust-item {
+            display: flex; align-items: center; gap: 10px;
+            font-size: 14px; color: var(--text-muted); font-weight: 500;
+        }
+        .trust-item-icon { color: var(--emerald); flex-shrink: 0; }
+        .trust-item strong { color: var(--text); font-weight: 600; }
+
+        /* SECTION */
+        section { padding: 100px 0; }
+        .section-eyebrow {
+            display: inline-block; font-size: 13px; font-weight: 700;
+            color: var(--accent); text-transform: uppercase; letter-spacing: 1.5px;
+            margin-bottom: 14px;
+        }
+        h2 {
+            font-size: clamp(32px, 4.5vw, 52px);
+            line-height: 1.1; letter-spacing: -1.2px;
+            font-weight: 800; margin-bottom: 20px;
+        }
+        h2 em { color: var(--accent); font-style: normal; }
+        .section-lead {
+            font-size: 19px; color: var(--text-muted);
+            max-width: 720px; line-height: 1.6;
+        }
+        .section-header { text-align: center; margin-bottom: 64px; }
+        .section-header .section-lead { margin: 0 auto; }
+
+        /* PROBLEM */
+        .problem { background: var(--bg-dark); color: white; }
+        .problem .section-eyebrow { color: var(--accent); }
+        .problem h2 { color: white; }
+        .problem .section-lead { color: #94a3b8; }
+        .problem-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px; margin-top: 48px;
+        }
+        .problem-item {
+            padding: 24px 28px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            display: flex; gap: 16px; align-items: flex-start;
+            transition: all 0.3s;
+        }
+        .problem-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(245, 158, 11, 0.3);
+            transform: translateY(-2px);
+        }
+        .problem-x {
+            flex-shrink: 0; width: 32px; height: 32px;
+            background: rgba(239, 68, 68, 0.15); color: #f87171;
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700;
+        }
+        .problem-text { font-size: 15.5px; line-height: 1.55; color: #e2e8f0; }
+
+        /* COST OF NOT KNOWING */
+        .cost-section { background: linear-gradient(135deg, #1a1f2e 0%, #0a0e1a 100%); color: white; padding: 80px 0; }
+        .cost-section h2 { color: white; }
+        .cost-card {
+            background: rgba(245, 158, 11, 0.08);
+            border: 1px solid rgba(245, 158, 11, 0.25);
+            border-radius: 20px;
+            padding: 48px;
+            display: grid; grid-template-columns: 1.2fr 1fr;
+            gap: 48px; align-items: center;
+            margin-top: 40px;
+        }
+        .cost-numbers { display: grid; gap: 16px; }
+        .cost-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 18px 22px; background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .cost-row-label { font-size: 14px; color: #cbd5e1; }
+        .cost-row-value { font-size: 22px; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
+        .cost-row.total { background: var(--accent); color: var(--bg-dark); border-color: var(--accent); }
+        .cost-row.total .cost-row-label { color: var(--bg-dark); font-weight: 600; }
+        .cost-row.total .cost-row-value { color: var(--bg-dark); font-size: 26px; font-weight: 800; }
+        .cost-callout { font-size: 16px; color: #cbd5e1; line-height: 1.6; margin-top: 14px; }
+
+        /* PRODUCTS */
+        .products { background: var(--bg-section); }
+        .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 48px; }
+        .product-card {
+            background: white; border: 1.5px solid var(--border);
+            border-radius: 20px; padding: 40px;
+            transition: all 0.3s;
+            display: flex; flex-direction: column;
+            position: relative;
+        }
+        .product-card:hover {
+            border-color: var(--bg-dark); transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+        .product-card.featured {
+            background: var(--bg-dark); color: white; border-color: var(--bg-dark);
+        }
+        .product-card.featured:hover { transform: translateY(-4px); border-color: var(--accent); }
+        .product-tag {
+            position: absolute; top: -12px; left: 32px;
+            background: var(--accent); color: var(--bg-dark);
+            font-size: 12px; font-weight: 700; padding: 5px 12px;
+            border-radius: 100px; text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .product-eyebrow { font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; }
+        .product-card.featured .product-eyebrow { color: var(--accent); }
+        .product-title { font-size: 32px; font-weight: 800; letter-spacing: -0.8px; margin-bottom: 12px; line-height: 1.15; }
+        .product-tagline { font-size: 16px; color: var(--text-muted); line-height: 1.55; margin-bottom: 32px; }
+        .product-card.featured .product-tagline { color: #cbd5e1; }
+        .product-features { list-style: none; padding: 0; margin: 0 0 32px 0; flex: 1; }
+        .product-features li { padding: 11px 0; display: flex; align-items: flex-start; gap: 12px; font-size: 15px; line-height: 1.4; border-bottom: 1px solid var(--border); }
+        .product-card.featured .product-features li { border-bottom-color: rgba(255, 255, 255, 0.08); }
+        .product-features li:last-child { border-bottom: none; }
+        .check-icon { color: var(--emerald); flex-shrink: 0; margin-top: 2px; }
+        .product-card.featured .check-icon { color: var(--accent); }
+        .product-price { display: flex; align-items: baseline; gap: 8px; margin-bottom: 24px; }
+        .price-amount { font-size: 36px; font-weight: 800; letter-spacing: -1px; }
+        .price-currency { font-size: 14px; color: var(--text-muted); font-weight: 500; }
+        .product-card.featured .price-currency { color: #94a3b8; }
+        .price-once { color: var(--emerald); font-size: 13px; font-weight: 600; }
+
+        .combo-banner {
+            margin-top: 32px; padding: 28px 36px;
+            background: linear-gradient(135deg, var(--accent) 0%, #fb923c 100%);
+            border-radius: 16px; color: var(--bg-dark);
+            display: flex; align-items: center; justify-content: space-between;
+            flex-wrap: wrap; gap: 20px;
+        }
+        .combo-text strong { font-size: 18px; font-weight: 700; display: block; margin-bottom: 4px; }
+        .combo-text span { font-size: 14px; opacity: 0.85; }
+        .combo-banner .btn { background: var(--bg-dark); color: white; }
+        .combo-banner .btn:hover { background: #1e293b; }
+
+        /* WHY IT WORKS */
+        .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 48px; }
+        .why-card {
+            padding: 32px; background: white; border: 1px solid var(--border);
+            border-radius: 16px; transition: all 0.3s;
+        }
+        .why-card:hover { border-color: var(--accent); box-shadow: var(--shadow-md); }
+        .why-icon-box {
+            width: 52px; height: 52px;
+            background: var(--accent-soft); color: var(--accent-hover);
+            border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            margin-bottom: 20px;
+        }
+        .why-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; letter-spacing: -0.3px; }
+        .why-card p { font-size: 15px; color: var(--text-muted); line-height: 1.6; }
+
+        /* HOW IT WORKS */
+        .how-section { background: var(--bg-section); }
+        .steps-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 56px; }
+        .step { text-align: left; }
+        .step-num {
+            display: inline-block; width: 44px; height: 44px;
+            background: var(--bg-dark); color: var(--accent);
+            border-radius: 50%; line-height: 44px; text-align: center;
+            font-weight: 800; font-size: 16px; margin-bottom: 18px;
+        }
+        .step h4 { font-size: 18px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.3px; }
+        .step p { font-size: 15px; color: var(--text-muted); line-height: 1.55; }
+
+        /* TESTIMONIALS */
+        .testimonials { background: var(--bg-dark); color: white; }
+        .testimonials h2 { color: white; }
+        .testimonials .section-lead { color: #94a3b8; }
+        .test-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; margin-top: 48px; }
+        .test-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 16px; padding: 32px;
+        }
+        .test-stars { color: var(--accent); font-size: 16px; margin-bottom: 18px; letter-spacing: 2px; }
+        .test-quote { font-size: 16.5px; line-height: 1.65; color: #e2e8f0; font-weight: 400; margin-bottom: 24px; }
+        .test-author { display: flex; align-items: center; gap: 14px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.08); }
+        .test-avatar {
+            width: 48px; height: 48px;
+            background: linear-gradient(135deg, var(--accent), #fb923c);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; color: var(--bg-dark); font-size: 17px;
+        }
+        .test-name { font-weight: 600; color: white; font-size: 15px; }
+        .test-role { color: #94a3b8; font-size: 13px; }
+
+        /* GUARANTEE */
+        .guarantee {
+            padding: 80px 0;
+            background: linear-gradient(135deg, var(--accent-soft) 0%, #fef9e7 100%);
+            border-top: 1px solid #fde68a; border-bottom: 1px solid #fde68a;
+        }
+        .guarantee-content {
+            display: grid; grid-template-columns: auto 1fr; gap: 40px;
+            align-items: center; max-width: 900px; margin: 0 auto;
+        }
+        .guarantee-seal {
+            width: 140px; height: 140px;
+            background: var(--bg-dark); color: var(--accent);
+            border-radius: 50%;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            font-weight: 800; text-align: center;
+            box-shadow: 0 12px 40px rgba(245, 158, 11, 0.3);
+            border: 4px solid white;
+            flex-shrink: 0;
+        }
+        .seal-num { font-size: 42px; line-height: 1; }
+        .seal-text { font-size: 11px; letter-spacing: 1.5px; margin-top: 4px; }
+        .guarantee-text h3 { font-size: 28px; font-weight: 800; margin-bottom: 12px; letter-spacing: -0.7px; }
+        .guarantee-text p { font-size: 17px; color: #78350f; line-height: 1.6; }
+
+        /* FAQ */
+        .faq { background: var(--bg); }
+        .faq-list { max-width: 800px; margin: 48px auto 0; }
+        .faq-item {
+            background: white; border: 1px solid var(--border);
+            border-radius: 12px; margin-bottom: 12px; overflow: hidden;
+            transition: all 0.2s;
+        }
+        .faq-item:hover { border-color: var(--border-strong); }
+        .faq-q {
+            padding: 22px 26px; font-weight: 600; font-size: 16px;
+            cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+            list-style: none; user-select: none;
+        }
+        .faq-q::-webkit-details-marker { display: none; }
+        .faq-q::after {
+            content: '+'; font-size: 24px; color: var(--text-muted);
+            font-weight: 300; transition: transform 0.2s;
+        }
+        .faq-item[open] .faq-q::after { transform: rotate(45deg); }
+        .faq-a { padding: 0 26px 22px; color: var(--text-muted); line-height: 1.65; font-size: 15.5px; }
+
+        /* FINAL CTA */
+        .final-cta {
+            background: var(--bg-dark); color: white;
+            text-align: center; padding: 100px 24px;
+            position: relative; overflow: hidden;
+        }
+        .final-cta::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(ellipse 800px 400px at center, rgba(245, 158, 11, 0.15), transparent);
+        }
+        .final-cta-inner { position: relative; z-index: 1; max-width: 700px; margin: 0 auto; }
+        .final-cta h2 { color: white; margin-bottom: 20px; }
+        .final-cta p { font-size: 19px; color: #cbd5e1; margin-bottom: 36px; }
+        .final-cta .btn-accent { box-shadow: 0 12px 32px rgba(245, 158, 11, 0.4); }
+        .final-cta-meta { margin-top: 28px; font-size: 14px; color: #94a3b8; }
+        .final-cta-meta strong { color: var(--accent); }
+
+        /* FOOTER */
+        .footer { background: var(--bg-dark); color: #94a3b8; padding: 64px 0 32px; border-top: 1px solid rgba(255, 255, 255, 0.06); }
+        .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+        .footer-brand .logo { color: white; margin-bottom: 16px; }
+        .footer-brand p { font-size: 14px; line-height: 1.6; max-width: 320px; }
+        .footer-col h4 { color: white; font-size: 14px; font-weight: 600; margin-bottom: 18px; }
+        .footer-col ul { list-style: none; padding: 0; }
+        .footer-col li { padding: 6px 0; font-size: 14px; }
+        .footer-col li a:hover { color: white; }
+        .footer-bottom {
+            padding-top: 32px; border-top: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 13px; flex-wrap: wrap; gap: 16px;
+        }
+
+        /* WhatsApp floating */
+        .whatsapp-float {
+            position: fixed; bottom: 24px; right: 24px; z-index: 50;
+            width: 60px; height: 60px;
+            background: var(--whatsapp); color: white;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 8px 24px rgba(37, 211, 102, 0.4);
+            transition: all 0.3s;
+        }
+        .whatsapp-float:hover { transform: scale(1.1) rotate(-8deg); }
+
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+            .nav-links { display: none; }
+            .product-grid { grid-template-columns: 1fr; }
+            .steps-grid { grid-template-columns: 1fr 1fr; }
+            .cost-card { grid-template-columns: 1fr; padding: 32px 24px; gap: 32px; }
+            .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+            .guarantee-content { grid-template-columns: 1fr; text-align: center; gap: 24px; }
+            .guarantee-seal { margin: 0 auto; }
+            section { padding: 72px 0; }
+            .hero { padding: 64px 0 56px; }
+            .hero-trust { gap: 16px; }
+        }
+        @media (max-width: 540px) {
+            .steps-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr; }
+            .product-card { padding: 32px 24px; }
+            .hero-ctas .btn { width: 100%; justify-content: center; }
+        }
+
+        /* Scroll reveal */
+        .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s ease, transform 0.7s ease; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="/" class="logo">
+                    <div class="logo-mark">TN</div>
+                    <span>Tus Números Claros</span>
+                </a>
+                <div class="nav-links">
+                    <a href="#productos">Sistemas</a>
+                    <a href="#como-funciona">Cómo funciona</a>
+                    <a href="#testimonios">Casos reales</a>
+                    <a href="#preguntas">Preguntas</a>
+                </div>
+                <a href="https://wa.me/5491100000000" class="btn btn-accent">Hablar por WhatsApp</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-inner">
+                <span class="badge"><span class="badge-dot"></span>Hecho en Argentina · 500+ emprendedores</span>
+                <h1>Entendé tu plata <em>sin volverte loco</em> con Excel.</h1>
+                <p class="hero-sub">Dos sistemas simples que ordenan tus finanzas personales y la rentabilidad real de tu negocio. Sin fórmulas raras. Sin cursos eternos. Y si te trabás, te respondo yo por WhatsApp.</p>
+                <div class="hero-ctas">
+                    <a href="finanzas-claras.html" class="btn btn-ghost btn-lg">Sistema personal · $19.900</a>
+                    <a href="negocio-rentable.html" class="btn btn-primary btn-lg">Sistema negocio · $34.900</a>
+                </div>
+                <div class="hero-trust">
+                    <div class="trust-item">
+                        <svg class="trust-item-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+                        <span><strong>7 días</strong> de garantía total</span>
+                    </div>
+                    <div class="trust-item">
+                        <svg class="trust-item-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                        <span><strong>Soporte por WhatsApp</strong> con persona real</span>
+                    </div>
+                    <div class="trust-item">
+                        <svg class="trust-item-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2L4 7v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V7l-8-5z"/></svg>
+                        <span><strong>Pago único.</strong> No es suscripción.</span>
+                    </div>
+                    <div class="trust-item">
+                        <svg class="trust-item-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15 8.5 22 9.3 17 14.1 18.5 21 12 17.8 5.5 21 7 14.1 2 9.3 9 8.5"/></svg>
+                        <span><strong>4.9/5</strong> en 500+ clientes</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PROBLEM -->
+    <section class="problem">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-eyebrow">El problema</span>
+                <h2>Vender no alcanza<br>si no sabés cuánto ganás.</h2>
+                <p class="section-lead">Tenés ventas, movimiento, clientes. Pero a fin de mes no sabés con claridad cuánto entró, cuánto salió, qué productos son rentables o cuánto necesitás vender para no perder. ¿Te suena alguna de estas?</p>
+            </div>
+            <div class="problem-grid reveal">
+                <div class="problem-item">
+                    <div class="problem-x">✕</div>
+                    <p class="problem-text">Anotás todo en cuadernos, notas del celular o varios Excel desordenados.</p>
+                </div>
+                <div class="problem-item">
+                    <div class="problem-x">✕</div>
+                    <p class="problem-text">No sabés si este mes ganaste plata o solamente moviste mercadería.</p>
+                </div>
+                <div class="problem-item">
+                    <div class="problem-x">✕</div>
+                    <p class="problem-text">Creés que un producto es rentable, pero nunca calculaste sus costos reales.</p>
+                </div>
+                <div class="problem-item">
+                    <div class="problem-x">✕</div>
+                    <p class="problem-text">No tenés idea cuánto necesitás vender para no perder.</p>
+                </div>
+                <div class="problem-item">
+                    <div class="problem-x">✕</div>
+                    <p class="problem-text">Mezclás la plata del negocio con la personal y a fin de mes no aparece.</p>
+                </div>
+                <div class="problem-item">
+                    <div class="problem-x">✕</div>
+                    <p class="problem-text">Te propusiste ahorrar este año, pero no llevás la cuenta.</p>
+                </div>
+                <div class="problem-item">
+                    <div class="problem-x">✕</div>
+                    <p class="problem-text">Tenés varias cuotas activas y no sabés cuándo se libera la primera.</p>
+                </div>
+                <div class="problem-item">
+                    <div class="problem-x">✕</div>
+                    <p class="problem-text">Decís "lo arreglo el mes que viene" desde hace seis meses.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- COST OF NOT KNOWING -->
+    <section class="cost-section">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-eyebrow" style="color: var(--accent);">¿Y mientras tanto?</span>
+                <h2>¿Cuánto te cuesta <em>no saber</em> tus números?</h2>
+                <p class="section-lead">Postergar este orden no es gratis. Es un costo invisible que se va comiendo tu negocio mes a mes. Hicimos los números con un emprendedor promedio que factura $1.000.000/mes:</p>
+            </div>
+            <div class="cost-card reveal">
+                <div class="cost-numbers">
+                    <div class="cost-row">
+                        <span class="cost-row-label">Producto que vendés a pérdida sin saber</span>
+                        <span class="cost-row-value">−$45.000/mes</span>
+                    </div>
+                    <div class="cost-row">
+                        <span class="cost-row-label">Plata personal mezclada con negocio</span>
+                        <span class="cost-row-value">−$35.000/mes</span>
+                    </div>
+                    <div class="cost-row">
+                        <span class="cost-row-label">Decisiones de precio mal calibradas</span>
+                        <span class="cost-row-value">−$28.000/mes</span>
+                    </div>
+                    <div class="cost-row">
+                        <span class="cost-row-label">Tiempo perdido armando planillas</span>
+                        <span class="cost-row-value">−$12.000/mes</span>
+                    </div>
+                    <div class="cost-row total">
+                        <span class="cost-row-label">Costo invisible por mes</span>
+                        <span class="cost-row-value">$120.000</span>
+                    </div>
+                </div>
+                <div>
+                    <h3 style="color: white; font-size: 26px; line-height: 1.2; letter-spacing: -0.5px; margin-bottom: 16px;">El sistema cuesta menos que un mes de "no saber".</h3>
+                    <p class="cost-callout">Negocio Rentable cuesta $34.900 — pago único. Si tenés un solo producto vendiéndose a pérdida, ya te pagaste el sistema. La pregunta no es si lo podés pagar. Es cuánto más te vas a bancar postergarlo.</p>
+                    <a href="negocio-rentable.html" class="btn btn-accent btn-lg" style="margin-top: 24px;">Quiero dejar de perder plata →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRODUCTS -->
+    <section class="products" id="productos">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-eyebrow">Dos sistemas. Una decisión.</span>
+                <h2>¿Necesitás ordenar tu plata personal o entender tu negocio?</h2>
+                <p class="section-lead">Cada sistema resuelve un problema distinto. Si tenés ambos —y la mayoría los tiene— el combo te sale 25% off.</p>
+            </div>
+
+            <div class="product-grid reveal">
+                <!-- Producto 1: Personal -->
+                <div class="product-card">
+                    <div class="product-eyebrow">Para vos · Personal</div>
+                    <h3 class="product-title">Finanzas Claras</h3>
+                    <p class="product-tagline">Para ordenar ingresos, gastos, ahorro y deudas — y saber exactamente en qué se te va la plata cada mes.</p>
+                    <ul class="product-features">
+                        <li><svg class="check-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> Registro mensual de ingresos por fuente</li>
+                        <li><svg class="check-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> Categorización automática de gastos</li>
+                        <li><svg class="check-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> Plan de ahorro con metas</li>
+                        <li><svg class="check-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> Seguimiento de deudas y cuotas</li>
+                        <li><svg class="check-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> Dashboard mensual y anual</li>
+                        <li><svg class="check-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> Tutorial en video (35 min)</li>
+                        <li><svg class="check-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> Soporte WhatsApp 30 días</li>
+                    </ul>
+                    <div class="product-price">
+                        <span class="price-amount">$19.900</span>
+                        <span class="price-currency">ARS</span>
+                        <span class="price-once">· pago único</span>
+                    </div>
+                    <a href="finanzas-claras.html" class="btn btn-primary btn-lg" style="width: 100%; justify-content: center;">Ver Finanzas Claras →</a>
+                </div>
+
+                <!-- Producto 2: Negocio (featured) -->
+                <div class="product-card featured">
+                    <span class="product-tag">Más popular</span>
+                    <div class="product-eyebrow">Para tu negocio</div>
+                    <h3 class="product-title">Negocio Rentable</h3>
+                    <p class="product-tagline">Para controlar caja, ventas, gastos, stock, costos, punto de equilibrio y resultado mensual — y tomar decisiones con números reales.</p>
+                    <ul class="product-features">
+                        <li><svg class="check-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> Control diario de caja e ingresos</li>
+                        <li><svg class="check-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> Gestión de stock y reposición</li>
+                        <li><svg class="check-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> Cálculo de costos por producto</li>
+                        <li><svg class="check-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> Punto de equilibrio automático</li>
+                        <li><svg class="check-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> Margen y rentabilidad por producto</li>
+                        <li><svg class="check-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> Resultado mensual y proyección</li>
+                        <li><svg class="check-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> Tutorial en video (60 min)</li>
+                        <li><svg class="check-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg> Soporte WhatsApp 60 días</li>
+                    </ul>
+                    <div class="product-price">
+                        <span class="price-amount">$34.900</span>
+                        <span class="price-currency" style="color: #94a3b8;">ARS</span>
+                        <span class="price-once">· pago único</span>
+                    </div>
+                    <a href="negocio-rentable.html" class="btn btn-accent btn-lg" style="width: 100%; justify-content: center;">Ver Negocio Rentable →</a>
+                </div>
+            </div>
+
+            <div class="combo-banner reveal">
+                <div class="combo-text">
+                    <strong>¿Te interesan los dos?</strong>
+                    <span>Pedí el combo completo y llevátelos con 25% de descuento.</span>
+                </div>
+                <a href="https://wa.me/5491100000000?text=Hola%2C%20quiero%20el%20combo%20completo" class="btn btn-lg">Pedir combo por WhatsApp</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHY IT WORKS -->
+    <section>
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-eyebrow">Por qué funciona</span>
+                <h2>Pensado para emprendedores reales,<br>no para contadores.</h2>
+                <p class="section-lead">Cero conocimientos técnicos. Cero teoría innecesaria. Solo lo que necesitás para entender y decidir.</p>
+            </div>
+            <div class="why-grid reveal">
+                <div class="why-card">
+                    <div class="why-icon-box"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg></div>
+                    <h3>No necesitás Excel avanzado</h3>
+                    <p>Si sabés escribir un número en una celda, sabés usar el sistema. Las fórmulas ya están armadas y blindadas.</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-icon-box"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
+                    <h3>Tutorial en video paso a paso</h3>
+                    <p>Te explico cómo cargar los datos, qué significa cada número y cómo leer los resultados. Para que nada quede en el aire.</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-icon-box"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg></div>
+                    <h3>Viene con ejemplo cargado</h3>
+                    <p>No empezás de cero. Tenés un caso real adentro para que veas exactamente cómo funciona y qué resultados da.</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-icon-box"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+                    <h3>Soporte WhatsApp con persona real</h3>
+                    <p>Si te trabás con algo me escribís y te ayudo yo. No es un robot ni un mail al vacío. Somos personas reales.</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-icon-box"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+                    <h3>Decisiones con datos reales</h3>
+                    <p>Vas a saber qué producto subir de precio, cuál sacar, cuándo invertir y cuándo aguantar. Con números, no corazonadas.</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-icon-box"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+                    <h3>15 minutos por mes</h3>
+                    <p>Una vez por semana cargás tus movimientos. El sistema arma todo automáticamente. Tu tiempo es para vender, no para planillar.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section class="how-section" id="como-funciona">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-eyebrow">Cómo funciona</span>
+                <h2>De confundido a claro<br>en 4 pasos.</h2>
+                <p class="section-lead">Sin instalaciones, sin contratos, sin meses de capacitación. Lo recibís hoy y mañana ya estás viendo tus números.</p>
+            </div>
+            <div class="steps-grid reveal">
+                <div class="step">
+                    <div class="step-num">1</div>
+                    <h4>Elegís el sistema</h4>
+                    <p>Finanzas Claras, Negocio Rentable, o el combo. Lo que mejor se adapta a tu situación actual.</p>
+                </div>
+                <div class="step">
+                    <div class="step-num">2</div>
+                    <h4>Recibís el archivo</h4>
+                    <p>Te llega por mail el Excel + el tutorial en video. Listo para abrir en Excel o Google Sheets.</p>
+                </div>
+                <div class="step">
+                    <div class="step-num">3</div>
+                    <h4>Cargás tus datos</h4>
+                    <p>Cargás ventas, gastos y costos. El sistema viene con un ejemplo armado para que veas cómo se hace.</p>
+                </div>
+                <div class="step">
+                    <div class="step-num">4</div>
+                    <h4>Ves tus números claros</h4>
+                    <p>El dashboard te muestra rentabilidad, punto de equilibrio, resultado mensual y todo lo que necesitás.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="testimonials" id="testimonios">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-eyebrow">Casos reales</span>
+                <h2>Emprendedores que pasaron<br>del caos al control.</h2>
+                <p class="section-lead">Estos son algunos de los más de 500 emprendedores que ya están trabajando con sus números claros.</p>
+            </div>
+            <div class="test-grid reveal">
+                <div class="test-card">
+                    <div class="test-stars">★★★★★</div>
+                    <p class="test-quote">Vendía mucho, todo el día con clientes, pero a fin de mes no quedaba nada. Cuando empecé a usar el sistema me di cuenta que dos productos los estaba vendiendo casi a pérdida.</p>
+                    <div class="test-author">
+                        <div class="test-avatar">MR</div>
+                        <div>
+                            <div class="test-name">María R.</div>
+                            <div class="test-role">Pastelería · Córdoba</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="test-card">
+                    <div class="test-stars">★★★★★</div>
+                    <p class="test-quote">Tenía cinco planillas distintas, dos cuadernos y notas en el celu. Ahora cargo todo en un solo lugar y a fin de mes sé exactamente cuánto gané. Cambió la cabeza con la que veo el negocio.</p>
+                    <div class="test-author">
+                        <div class="test-avatar">JL</div>
+                        <div>
+                            <div class="test-name">Juan L.</div>
+                            <div class="test-role">Local de indumentaria · Mendoza</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="test-card">
+                    <div class="test-stars">★★★★★</div>
+                    <p class="test-quote">Lo que más me sirvió fue el punto de equilibrio. Saber exactamente cuánto necesito facturar para no perder me ordenó toda la cabeza. Antes vendía sin saber si me alcanzaba.</p>
+                    <div class="test-author">
+                        <div class="test-avatar">CM</div>
+                        <div>
+                            <div class="test-name">Carolina M.</div>
+                            <div class="test-role">Estudio contable · CABA</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="test-card">
+                    <div class="test-stars">★★★★★</div>
+                    <p class="test-quote">Pensé que iba a ser complicado por mi nivel de Excel (cero), pero el tutorial es buenísimo. En una tarde ya tenía todo cargado. La rentabilidad por producto me voló la cabeza.</p>
+                    <div class="test-author">
+                        <div class="test-avatar">SP</div>
+                        <div>
+                            <div class="test-name">Sebastián P.</div>
+                            <div class="test-role">Cervecería artesanal · Rosario</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GUARANTEE -->
+    <section class="guarantee">
+        <div class="container">
+            <div class="guarantee-content reveal">
+                <div class="guarantee-seal">
+                    <div class="seal-num">7</div>
+                    <div class="seal-text">DÍAS<br>GARANTÍA</div>
+                </div>
+                <div class="guarantee-text">
+                    <h3>Probalo 7 días. Si no cambia cómo ves tu plata, te devuelvo el 100%.</h3>
+                    <p>Sin preguntas raras, sin letra chica, sin tener que justificar nada. Me escribís por WhatsApp y te transfiero la devolución completa. La garantía es mía, no tuya — la palabra vale más que la plata.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq" id="preguntas">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-eyebrow">Preguntas frecuentes</span>
+                <h2>Lo que más nos preguntan.</h2>
+            </div>
+            <div class="faq-list reveal">
+                <details class="faq-item">
+                    <summary class="faq-q">¿Necesito saber Excel para usarlo?</summary>
+                    <div class="faq-a">No. Si sabés escribir un número en una celda, ya sabés lo suficiente. Las fórmulas están todas armadas y bloqueadas para que no las rompas sin querer. El tutorial en video te muestra cada paso, desde abrir el archivo hasta interpretar los resultados.</div>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-q">¿Funciona con Google Sheets o solo Excel?</summary>
+                    <div class="faq-a">Funciona perfecto con los dos. El archivo viene en formato Excel (.xlsx) pero podés subirlo a Google Sheets sin perder ninguna funcionalidad. En el tutorial te muestro las dos opciones.</div>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-q">¿Sirve para cualquier tipo de negocio?</summary>
+                    <div class="faq-a">Sí. Lo usan emprendedores de gastronomía, indumentaria, servicios, venta online, kioscos, oficios independientes, profesionales. La estructura es flexible y se adapta a productos, servicios o mixto.</div>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-q">¿Cuánto tiempo me lleva cargar los datos cada mes?</summary>
+                    <div class="faq-a">Una vez que le agarrás la mano, entre 15 y 30 minutos por mes. Lo ideal es cargar movimientos cada pocos días para que no se acumulen. Con la práctica se vuelve automático.</div>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-q">¿Qué pasa si me trabo o no entiendo algo?</summary>
+                    <div class="faq-a">Tenés soporte por WhatsApp incluido (30 días en Finanzas Claras, 60 días en Negocio Rentable). Me escribís y te ayudo a destrabar lo que sea. Después podés extender el soporte si querés.</div>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-q">¿Hay un solo pago o es suscripción?</summary>
+                    <div class="faq-a">Pago único. Lo comprás una vez y es tuyo para siempre. Las actualizaciones que vayan saliendo te las paso gratis al mismo mail con el que compraste.</div>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-q">Existen plantillas gratis en Google. ¿Por qué pagar?</summary>
+                    <div class="faq-a">Sí, existen. La diferencia es lo que NO tienen: tutorial en video paso a paso, ejemplo cargado para que entiendas cómo funciona, soporte humano por WhatsApp si te trabás, y la garantía de que está pensado para emprendedores argentinos. Las plantillas gratis suelen ser bonitas pero te dejan solo. Acá pagás por el sistema completo: planilla + acompañamiento.</div>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-q">¿Y si compro y no lo uso?</summary>
+                    <div class="faq-a">Tenés 7 días para probarlo y pedir devolución total. Pero más allá de eso: el sistema viene con ejemplo cargado y tutorial guiado para que la primera carga te lleve menos de una hora. La idea es justamente que NO se quede en el cajón. Si después de eso sentís que no es para vos, te devuelvo el 100%.</div>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-q">¿Puedo pedir devolución si no me convence?</summary>
+                    <div class="faq-a">Sí. Tenés 7 días desde la compra para probarlo. Si no es lo que esperabas, me escribís y te devuelvo el 100%. Sin preguntas raras ni letra chica.</div>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-q">¿Cómo lo recibo después de comprar?</summary>
+                    <div class="faq-a">Te llega un mail con el archivo Excel, el link al video tutorial y un PDF con la guía rápida. Todo en tu casilla en menos de 5 minutos después del pago confirmado.</div>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-q">¿Aceptan transferencia, MercadoPago, tarjeta?</summary>
+                    <div class="faq-a">Aceptamos transferencia bancaria, MercadoPago (con cuotas sin interés según promociones vigentes) y todas las tarjetas. Coordinamos por WhatsApp el método que mejor te quede.</div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="final-cta">
+        <div class="final-cta-inner">
+            <h2>Empezá hoy. En una hora ya tenés tus números claros.</h2>
+            <p>Contame en 1 minuto cómo es tu situación y te recomiendo el sistema que mejor se adapta. Sin compromiso, sin cobrar la consulta, sin vueltas.</p>
+            <a href="https://wa.me/5491100000000?text=Hola%20Fede%2C%20quiero%20saber%20qué%20sistema%20me%20conviene" class="btn btn-accent btn-lg">Hablar conmigo por WhatsApp →</a>
+            <div class="final-cta-meta">
+                <strong>Garantía 7 días</strong> · Pago único · Tutorial incluido · Soporte por WhatsApp con Fede
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="/" class="logo">
+                        <div class="logo-mark">TN</div>
+                        <span style="color: white;">Tus Números Claros</span>
+                    </a>
+                    <p>Sistemas simples para que entiendas las finanzas de tu negocio sin volverte loco con Excel ni con cursos eternos.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Sistemas</h4>
+                    <ul>
+                        <li><a href="finanzas-claras.html">Finanzas Claras</a></li>
+                        <li><a href="negocio-rentable.html">Negocio Rentable</a></li>
+                        <li><a href="https://wa.me/5491100000000">Combo completo</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Recursos</h4>
+                    <ul>
+                        <li><a href="#como-funciona">Cómo funciona</a></li>
+                        <li><a href="#preguntas">Preguntas frecuentes</a></li>
+                        <li><a href="#testimonios">Casos reales</a></li>
+                        <li><a href="https://wa.me/5491100000000">Contacto</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#">Términos y condiciones</a></li>
+                        <li><a href="#">Política de privacidad</a></li>
+                        <li><a href="#">Política de devoluciones</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>© 2026 Tus Números Claros. Hecho en Argentina.</span>
+                <span>Soporte: <a href="https://wa.me/5491100000000" style="color: var(--accent);">WhatsApp</a></span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WHATSAPP FLOAT -->
+    <a href="https://wa.me/5491100000000" class="whatsapp-float" aria-label="Hablar por WhatsApp">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893A11.821 11.821 0 0020.464 3.488"/></svg>
+    </a>
+
+    <script>
+        // Reveal on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('visible');
+                    observer.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+
+</body>
+</html>

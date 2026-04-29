@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Negocio Rentable · Descubrí cuál de tus productos te hace perder plata · Tus Números Claros</title>
+    <meta name="description" content="Sistema simple en Excel para entender la rentabilidad real de tu negocio. Caja, costos, punto de equilibrio, margen por producto. Tutorial incluido. Garantía 7 días. $34.900 ARS pago único.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #fafaf9;
+            --bg-dark: #0a0e1a;
+            --bg-section: #ffffff;
+            --text: #0f172a;
+            --text-muted: #64748b;
+            --text-light: #94a3b8;
+            --accent: #f59e0b;
+            --accent-hover: #d97706;
+            --accent-soft: #fef3c7;
+            --emerald: #10b981;
+            --emerald-soft: #d1fae5;
+            --border: #e2e8f0;
+            --border-strong: #cbd5e1;
+            --whatsapp: #25D366;
+            --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.65; color: var(--text); background: var(--bg);
+            -webkit-font-smoothing: antialiased; font-size: 16px;
+        }
+        a { color: inherit; text-decoration: none; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+        /* HEADER */
+        .header {
+            position: sticky; top: 0; z-index: 100;
+            background: rgba(250, 250, 249, 0.85);
+            backdrop-filter: saturate(180%) blur(12px);
+            -webkit-backdrop-filter: saturate(180%) blur(12px);
+            border-bottom: 1px solid var(--border);
+        }
+        .nav { display: flex; align-items: center; justify-content: space-between; height: 72px; }
+        .logo { display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 17px; letter-spacing: -0.3px; }
+        .logo-mark {
+            width: 36px; height: 36px;
+            background: var(--bg-dark); color: var(--accent);
+            border-radius: 9px; display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 14px;
+        }
+        .nav-links { display: flex; gap: 32px; align-items: center; }
+        .nav-links a { font-size: 15px; color: var(--text-muted); font-weight: 500; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--text); }
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 11px 20px; border-radius: 10px;
+            font-weight: 600; font-size: 15px;
+            transition: all 0.2s; cursor: pointer; border: none; white-space: nowrap;
+        }
+        .btn-primary { background: var(--bg-dark); color: white; }
+        .btn-primary:hover { background: #1e293b; transform: translateY(-1px); }
+        .btn-accent { background: var(--accent); color: var(--bg-dark); }
+        .btn-accent:hover { background: var(--accent-hover); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(245, 158, 11, 0.3); }
+        .btn-whatsapp { background: var(--whatsapp); color: white; }
+        .btn-whatsapp:hover { background: #1da851; }
+        .btn-ghost { background: transparent; color: var(--text); border: 1.5px solid var(--border-strong); }
+        .btn-ghost:hover { background: var(--text); color: white; }
+        .btn-lg { padding: 16px 28px; font-size: 16px; border-radius: 12px; }
+
+        /* BREADCRUMB */
+        .breadcrumb { padding: 20px 0; font-size: 14px; color: var(--text-muted); }
+        .breadcrumb a:hover { color: var(--accent); }
+        .breadcrumb .sep { margin: 0 8px; opacity: 0.5; }
+        .breadcrumb .current { color: var(--text); font-weight: 500; }
+
+        /* HERO */
+        .hero-product {
+            padding: 40px 0 80px;
+            background: linear-gradient(180deg, var(--accent-soft) 0%, var(--bg) 100%);
+            position: relative; overflow: hidden;
+        }
+        .hero-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 64px; align-items: center; }
+        .badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 6px 14px; background: var(--bg-dark); color: var(--accent);
+            border-radius: 100px; font-size: 13px; font-weight: 600;
+            margin-bottom: 24px;
+        }
+        h1 {
+            font-size: clamp(36px, 5vw, 60px);
+            line-height: 1.05; letter-spacing: -1.8px;
+            font-weight: 800; margin-bottom: 24px;
+        }
+        h1 em { color: var(--accent-hover); font-style: normal; font-weight: 800; }
+        .hero-sub {
+            font-size: 19px; color: var(--text-muted);
+            line-height: 1.6; margin-bottom: 32px;
+        }
+        .hero-price {
+            display: flex; align-items: baseline; gap: 12px; margin-bottom: 28px;
+            padding: 20px 24px; background: white;
+            border-radius: 14px; border: 1px solid var(--border);
+            box-shadow: var(--shadow-md);
+        }
+        .hero-price .amount { font-size: 38px; font-weight: 800; letter-spacing: -1px; }
+        .hero-price .currency { font-size: 14px; color: var(--text-muted); font-weight: 500; }
+        .hero-price .once { color: var(--emerald); font-size: 13px; font-weight: 700; padding: 4px 10px; background: var(--emerald-soft); border-radius: 6px; }
+        .hero-ctas { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 28px; }
+        .hero-meta { display: flex; gap: 20px; flex-wrap: wrap; font-size: 14px; color: var(--text-muted); }
+        .hero-meta-item { display: flex; align-items: center; gap: 8px; }
+        .hero-meta-item svg { color: var(--emerald); flex-shrink: 0; }
+
+        /* Hero Mockup */
+        .hero-mockup {
+            background: var(--bg-dark); color: white;
+            border-radius: 16px; padding: 32px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .mockup-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
+        .mockup-title { font-size: 13px; font-weight: 600; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; }
+        .mockup-month { font-size: 13px; color: #94a3b8; font-weight: 500; }
+        .mockup-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+        .mockup-stat { padding: 16px; background: rgba(255, 255, 255, 0.04); border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.06); }
+        .mockup-stat-label { font-size: 11px; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+        .mockup-stat-value { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; font-variant-numeric: tabular-nums; color: white; }
+        .mockup-stat-value.accent { color: var(--accent); }
+        .mockup-stat-trend { font-size: 11px; color: var(--emerald); font-weight: 600; margin-top: 4px; }
+        .mockup-stat-trend.down { color: #f87171; }
+        .mockup-equilibrium {
+            margin-top: 16px; padding: 16px;
+            background: rgba(245, 158, 11, 0.1); border-radius: 10px;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .mockup-equilibrium-label { font-size: 13px; color: #fde68a; font-weight: 500; }
+        .mockup-equilibrium-status { font-size: 13px; color: var(--emerald); font-weight: 700; }
+        .mockup-products { margin-top: 16px; padding: 16px; background: rgba(255, 255, 255, 0.04); border-radius: 10px; }
+        .mockup-products-title { font-size: 12px; color: #94a3b8; font-weight: 600; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .mockup-product-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 13px; border-bottom: 1px solid rgba(255, 255, 255, 0.04); }
+        .mockup-product-row:last-child { border-bottom: none; }
+        .mockup-product-name { color: white; font-weight: 500; }
+        .mockup-product-margin { font-weight: 700; font-variant-numeric: tabular-nums; }
+        .margin-good { color: var(--emerald); }
+        .margin-bad { color: #f87171; }
+        .margin-warn { color: var(--accent); }
+
+        /* SECTIONS */
+        section { padding: 96px 0; }
+        .section-eyebrow {
+            display: inline-block; font-size: 13px; font-weight: 700;
+            color: var(--accent-hover); text-transform: uppercase; letter-spacing: 1.5px;
+            margin-bottom: 14px;
+        }
+        h2 {
+            font-size: clamp(30px, 4vw, 46px);
+            line-height: 1.1; letter-spacing: -1px;
+            font-weight: 800; margin-bottom: 18px;
+        }
+        h2 em { color: var(--accent-hover); font-style: normal; }
+        .section-lead { font-size: 18px; color: var(--text-muted); max-width: 720px; line-height: 1.6; }
+        .section-header { text-align: center; margin-bottom: 56px; }
+        .section-header .section-lead { margin: 0 auto; }
+
+        /* COSTO DE NO SABER */
+        .cost-section { background: var(--bg-dark); color: white; }
+        .cost-section h2 { color: white; }
+        .cost-section .section-lead { color: #94a3b8; }
+        .cost-section .section-eyebrow { color: var(--accent); }
+        .cost-card {
+            background: rgba(245, 158, 11, 0.08);
+            border: 1px solid rgba(245, 158, 11, 0.25);
+            border-radius: 20px; padding: 48px;
+            display: grid; grid-template-columns: 1.2fr 1fr;
+            gap: 48px; align-items: center; margin-top: 40px;
+        }
+        .cost-numbers { display: grid; gap: 14px; }
+        .cost-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 18px 22px; background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .cost-row-label { font-size: 14px; color: #cbd5e1; }
+        .cost-row-value { font-size: 22px; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums; }
+        .cost-row.total { background: var(--accent); color: var(--bg-dark); border-color: var(--accent); }
+        .cost-row.total .cost-row-label { color: var(--bg-dark); font-weight: 700; }
+        .cost-row.total .cost-row-value { color: var(--bg-dark); font-size: 26px; font-weight: 800; }
+        .cost-callout { font-size: 16px; color: #cbd5e1; line-height: 1.6; margin-top: 14px; }
+
+        /* PAINS */
+        .pain-section { background: var(--bg-section); }
+        .pain-block {
+            display: grid; grid-template-columns: 1fr 1fr;
+            gap: 48px; align-items: center;
+            padding: 56px 0; border-bottom: 1px solid var(--border);
+        }
+        .pain-block:last-child { border-bottom: none; }
+        .pain-block.reverse { direction: rtl; }
+        .pain-block.reverse > * { direction: ltr; }
+        .pain-num {
+            display: inline-block; padding: 4px 10px;
+            background: #fee2e2; color: #991b1b;
+            font-size: 12px; font-weight: 700;
+            border-radius: 6px; text-transform: uppercase; letter-spacing: 1px;
+            margin-bottom: 16px;
+        }
+        .pain-headline { font-size: 30px; font-weight: 800; letter-spacing: -0.7px; line-height: 1.15; margin-bottom: 16px; }
+        .pain-text { font-size: 16.5px; color: var(--text-muted); line-height: 1.65; margin-bottom: 24px; }
+        .solution-box {
+            background: white; border: 1.5px solid var(--accent);
+            border-radius: 14px; padding: 24px 28px;
+        }
+        .solution-label {
+            display: inline-flex; align-items: center; gap: 8px;
+            font-size: 12px; font-weight: 700; color: var(--accent-hover);
+            text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px;
+        }
+        .solution-text { font-size: 15.5px; line-height: 1.65; color: var(--text); }
+        .solution-text strong { color: var(--text); }
+
+        .pain-visual {
+            background: linear-gradient(135deg, var(--accent-soft) 0%, white 100%);
+            border-radius: 18px; padding: 40px;
+            min-height: 280px;
+            display: flex; align-items: center; justify-content: center;
+            border: 1px solid var(--border);
+        }
+        .pain-visual-card {
+            background: white; padding: 24px; border-radius: 12px;
+            box-shadow: var(--shadow-md); width: 100%; max-width: 380px;
+        }
+        .visual-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px dashed var(--border); font-size: 14px; }
+        .visual-row:last-child { border-bottom: none; padding-top: 14px; font-weight: 700; }
+        .visual-row .label { color: var(--text-muted); }
+        .visual-row .value { font-weight: 600; font-variant-numeric: tabular-nums; }
+        .visual-row .value.in { color: var(--emerald); }
+        .visual-row .value.out { color: #ef4444; }
+        .visual-row .value.warn { color: var(--accent-hover); }
+        .visual-row .value.neutral { color: var(--text); }
+
+        /* WHAT'S INCLUDED */
+        .included-section { background: var(--bg-dark); color: white; }
+        .included-section h2 { color: white; }
+        .included-section .section-lead { color: #94a3b8; }
+        .included-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 56px; }
+        .included-item {
+            padding: 28px 32px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+        }
+        .included-item-icon {
+            width: 44px; height: 44px;
+            background: var(--accent); color: var(--bg-dark);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 18px;
+        }
+        .included-item h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; color: white; letter-spacing: -0.3px; }
+        .included-item p { font-size: 14.5px; color: #cbd5e1; line-height: 1.6; }
+
+        /* HOW */
+        .how-section { background: var(--bg-section); }
+        .how-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-top: 48px; }
+        .how-step {
+            text-align: left; padding: 28px;
+            background: var(--bg); border-radius: 14px;
+            border: 1px solid var(--border);
+        }
+        .how-num {
+            width: 36px; height: 36px; background: var(--bg-dark); color: var(--accent);
+            border-radius: 50%; line-height: 36px; text-align: center;
+            font-weight: 800; font-size: 14px; margin-bottom: 16px;
+        }
+        .how-step h4 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+        .how-step p { font-size: 14px; color: var(--text-muted); line-height: 1.55; }
+
+        /* TESTIMONIALS GRID */
+        .testimonials-section { background: var(--bg-section); }
+        .test-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px; margin-top: 48px; }
+        .test-card {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 16px; padding: 32px;
+        }
+        .test-stars { color: var(--accent); font-size: 16px; margin-bottom: 18px; letter-spacing: 2px; }
+        .test-quote { font-size: 16px; line-height: 1.65; color: var(--text); font-weight: 400; margin-bottom: 24px; }
+        .test-author { display: flex; align-items: center; gap: 14px; padding-top: 20px; border-top: 1px solid var(--border); }
+        .test-avatar {
+            width: 48px; height: 48px;
+            background: linear-gradient(135deg, var(--accent), #fb923c);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; color: var(--bg-dark); font-size: 17px;
+        }
+        .test-name { font-weight: 600; font-size: 15px; }
+        .test-role { color: var(--text-muted); font-size: 13px; }
+
+        /* PRICE & GUARANTEE */
+        .price-section { background: var(--bg); padding: 80px 0; }
+        .price-card {
+            max-width: 600px; margin: 0 auto;
+            background: white; border-radius: 20px;
+            padding: 56px 48px; text-align: center;
+            box-shadow: var(--shadow-lg); border: 1px solid var(--border);
+            position: relative;
+        }
+        .price-eyebrow { font-size: 13px; font-weight: 700; color: var(--accent-hover); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; }
+        .price-title { font-size: 32px; font-weight: 800; letter-spacing: -0.7px; margin-bottom: 8px; }
+        .price-value { display: flex; align-items: baseline; justify-content: center; gap: 10px; margin: 32px 0 8px; }
+        .price-value .amount { font-size: 64px; font-weight: 900; letter-spacing: -2.5px; line-height: 1; }
+        .price-value .currency { font-size: 18px; color: var(--text-muted); font-weight: 600; }
+        .price-once-label { color: var(--emerald); font-weight: 700; font-size: 14px; margin-bottom: 32px; padding: 6px 14px; background: var(--emerald-soft); border-radius: 100px; display: inline-block; }
+        .price-includes {
+            text-align: left; margin: 32px 0;
+            padding: 24px; background: var(--bg);
+            border-radius: 12px;
+        }
+        .price-includes h4 { font-size: 13px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 14px; }
+        .price-includes ul { list-style: none; padding: 0; }
+        .price-includes li { padding: 8px 0; display: flex; gap: 10px; align-items: flex-start; font-size: 14.5px; }
+        .price-includes svg { color: var(--emerald); flex-shrink: 0; margin-top: 3px; }
+        .price-cta { width: 100%; justify-content: center; }
+        .price-meta { margin-top: 20px; font-size: 13px; color: var(--text-muted); }
+
+        .guarantee-bar {
+            margin-top: 32px;
+            display: flex; align-items: center; gap: 20px;
+            padding: 20px 28px;
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 14px; max-width: 600px; margin-left: auto; margin-right: auto;
+        }
+        .guarantee-bar-seal {
+            width: 60px; height: 60px;
+            background: var(--bg-dark); color: var(--accent);
+            border-radius: 50%;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 18px; flex-shrink: 0;
+            border: 3px solid white;
+        }
+        .guarantee-bar-text { text-align: left; }
+        .guarantee-bar-text strong { display: block; font-size: 15px; color: #78350f; margin-bottom: 4px; }
+        .guarantee-bar-text span { font-size: 13.5px; color: #92400e; line-height: 1.5; }
+
+        /* FAQ */
+        .faq { background: var(--bg-section); }
+        .faq-list { max-width: 800px; margin: 48px auto 0; }
+        .faq-item {
+            background: var(--bg); border: 1px solid var(--border);
+            border-radius: 12px; margin-bottom: 12px; overflow: hidden;
+        }
+        .faq-q {
+            padding: 22px 26px; font-weight: 600; font-size: 16px;
+            cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+            list-style: none; user-select: none;
+        }
+        .faq-q::-webkit-details-marker { display: none; }
+        .faq-q::after { content: '+'; font-size: 24px; color: var(--text-muted); font-weight: 300; transition: transform 0.2s; }
+        .faq-item[open] .faq-q::after { transform: rotate(45deg); color: var(--accent-hover); }
+        .faq-a { padding: 0 26px 22px; color: var(--text-muted); line-height: 1.65; font-size: 15.5px; }
+
+        /* FINAL CTA */
+        .final-cta {
+            background: var(--bg-dark); color: white;
+            text-align: center; padding: 100px 24px;
+            position: relative; overflow: hidden;
+        }
+        .final-cta::before {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(ellipse 800px 400px at center, rgba(245, 158, 11, 0.15), transparent);
+        }
+        .final-cta-inner { position: relative; z-index: 1; max-width: 700px; margin: 0 auto; }
+        .final-cta h2 { color: white; }
+        .final-cta p { font-size: 18px; color: #cbd5e1; margin-bottom: 36px; }
+        .final-cta .btn-accent { box-shadow: 0 12px 32px rgba(245, 158, 11, 0.4); }
+        .final-cta-meta { margin-top: 24px; font-size: 14px; color: #94a3b8; }
+        .final-cta-meta strong { color: var(--accent); }
+
+        /* FOOTER */
+        .footer { background: var(--bg-dark); color: #94a3b8; padding: 64px 0 32px; }
+        .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+        .footer-brand .logo { color: white; margin-bottom: 16px; }
+        .footer-brand p { font-size: 14px; line-height: 1.6; max-width: 320px; }
+        .footer-col h4 { color: white; font-size: 14px; font-weight: 600; margin-bottom: 18px; }
+        .footer-col ul { list-style: none; padding: 0; }
+        .footer-col li { padding: 6px 0; font-size: 14px; }
+        .footer-col li a:hover { color: white; }
+        .footer-bottom { padding-top: 32px; border-top: 1px solid rgba(255, 255, 255, 0.06); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; font-size: 13px; }
+
+        .whatsapp-float {
+            position: fixed; bottom: 24px; right: 24px; z-index: 50;
+            width: 60px; height: 60px;
+            background: var(--whatsapp); color: white;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 8px 24px rgba(37, 211, 102, 0.4);
+            transition: all 0.3s;
+        }
+        .whatsapp-float:hover { transform: scale(1.1) rotate(-8deg); }
+
+        @media (max-width: 900px) {
+            .nav-links { display: none; }
+            .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+            .pain-block { grid-template-columns: 1fr; gap: 32px; padding: 40px 0; }
+            .pain-block.reverse { direction: ltr; }
+            .how-grid { grid-template-columns: 1fr 1fr; }
+            .footer-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+            .cost-card { grid-template-columns: 1fr; padding: 32px 24px; gap: 32px; }
+            section { padding: 64px 0; }
+            .price-card { padding: 40px 28px; }
+            .price-value .amount { font-size: 48px; }
+        }
+        @media (max-width: 540px) {
+            .how-grid { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr; }
+            .hero-ctas .btn { width: 100%; justify-content: center; }
+            .guarantee-bar { flex-direction: column; text-align: center; }
+            .guarantee-bar-text { text-align: center; }
+        }
+
+        .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s ease, transform 0.7s ease; }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="container">
+            <nav class="nav">
+                <a href="index.html" class="logo">
+                    <div class="logo-mark">TN</div>
+                    <span>Tus Números Claros</span>
+                </a>
+                <div class="nav-links">
+                    <a href="index.html#productos">Sistemas</a>
+                    <a href="index.html#como-funciona">Cómo funciona</a>
+                    <a href="#testimonios">Casos reales</a>
+                    <a href="#preguntas">Preguntas</a>
+                </div>
+                <a href="https://wa.me/5491100000000" class="btn btn-accent">Hablar por WhatsApp</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- BREADCRUMB -->
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="index.html">Inicio</a>
+            <span class="sep">/</span>
+            <a href="index.html#productos">Sistemas</a>
+            <span class="sep">/</span>
+            <span class="current">Negocio Rentable</span>
+        </div>
+    </div>
+
+    <!-- HERO -->
+    <section class="hero-product">
+        <div class="container">
+            <div class="hero-grid">
+                <div>
+                    <span class="badge">● Para tu negocio · El más popular</span>
+                    <h1>Descubrí cuál de tus productos te <em>hace perder plata</em>.</h1>
+                    <p class="hero-sub">Negocio Rentable es un sistema simple en Excel para entender la rentabilidad real de tu negocio. Caja, costos, punto de equilibrio, margen por producto — todo claro en menos de 60 minutos.</p>
+
+                    <div class="hero-price">
+                        <span class="amount">$34.900</span>
+                        <span class="currency">ARS</span>
+                        <span class="once">PAGO ÚNICO</span>
+                    </div>
+
+                    <div class="hero-ctas">
+                        <a href="https://wa.me/5491100000000?text=Hola%2C%20quiero%20Negocio%20Rentable" class="btn btn-accent btn-lg">Quiero Negocio Rentable →</a>
+                        <a href="https://wa.me/5491100000000?text=Hola%20Fede%2C%20tengo%20una%20pregunta%20sobre%20Negocio%20Rentable" class="btn btn-ghost btn-lg">Tengo una duda</a>
+                    </div>
+
+                    <div class="hero-meta">
+                        <div class="hero-meta-item">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+                            <span>Garantía 7 días</span>
+                        </div>
+                        <div class="hero-meta-item">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+                            <span>Tutorial en video (60 min)</span>
+                        </div>
+                        <div class="hero-meta-item">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+                            <span>Soporte WhatsApp 60 días</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="hero-mockup">
+                    <div class="mockup-header">
+                        <span class="mockup-title">Resultado Mensual</span>
+                        <span class="mockup-month">Abril 2026</span>
+                    </div>
+                    <div class="mockup-grid">
+                        <div class="mockup-stat">
+                            <div class="mockup-stat-label">Ventas</div>
+                            <div class="mockup-stat-value">$2.450K</div>
+                            <div class="mockup-stat-trend">+18% vs marzo</div>
+                        </div>
+                        <div class="mockup-stat">
+                            <div class="mockup-stat-label">Ganancia</div>
+                            <div class="mockup-stat-value accent">$612K</div>
+                            <div class="mockup-stat-trend">+24% vs marzo</div>
+                        </div>
+                        <div class="mockup-stat">
+                            <div class="mockup-stat-label">Margen</div>
+                            <div class="mockup-stat-value">25%</div>
+                            <div class="mockup-stat-trend">+2 pts</div>
+                        </div>
+                        <div class="mockup-stat">
+                            <div class="mockup-stat-label">Caja</div>
+                            <div class="mockup-stat-value">+$450K</div>
+                            <div class="mockup-stat-trend">positiva</div>
+                        </div>
+                    </div>
+                    <div class="mockup-equilibrium">
+                        <span class="mockup-equilibrium-label">Punto de equilibrio: $1.8M</span>
+                        <span class="mockup-equilibrium-status">✓ Superado</span>
+                    </div>
+                    <div class="mockup-products">
+                        <div class="mockup-products-title">Rentabilidad por producto</div>
+                        <div class="mockup-product-row">
+                            <span class="mockup-product-name">🍞 Pan artesanal</span>
+                            <span class="mockup-product-margin margin-good">+38%</span>
+                        </div>
+                        <div class="mockup-product-row">
+                            <span class="mockup-product-name">🥐 Croissants</span>
+                            <span class="mockup-product-margin margin-good">+32%</span>
+                        </div>
+                        <div class="mockup-product-row">
+                            <span class="mockup-product-name">🎂 Tortas chicas</span>
+                            <span class="mockup-product-margin margin-warn">+8%</span>
+                        </div>
+                        <div class="mockup-product-row">
+                            <span class="mockup-product-name">🧁 Cupcakes</span>
+                            <span class="mockup-product-margin margin-bad">−4%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- COSTO DE NO SABER -->
+    <section class="cost-section">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-eyebrow">Antes de seguir</span>
+                <h2>¿Cuánto te cuesta <em>no saber</em>?</h2>
+                <p class="section-lead">El costo invisible de postergar este orden, en un negocio promedio que factura $1.000.000/mes:</p>
+            </div>
+            <div class="cost-card reveal">
+                <div class="cost-numbers">
+                    <div class="cost-row">
+                        <span class="cost-row-label">Producto vendido a pérdida sin saber</span>
+                        <span class="cost-row-value">−$45.000/mes</span>
+                    </div>
+                    <div class="cost-row">
+                        <span class="cost-row-label">Plata personal mezclada con negocio</span>
+                        <span class="cost-row-value">−$35.000/mes</span>
+                    </div>
+                    <div class="cost-row">
+                        <span class="cost-row-label">Decisiones de precio mal calibradas</span>
+                        <span class="cost-row-value">−$28.000/mes</span>
+                    </div>
+                    <div class="cost-row">
+                        <span class="cost-row-label">Tiempo perdido armando planillas</span>
+                        <span class="cost-row-value">−$12.000/mes</span>
+                    </div>
+                    <div class="cost-row total">
+                        <span class="cost-row-label">Costo invisible mensual</span>
+                        <span class="cost-row-value">$120.000</span>
+                    </div>
+                </div>
+                <div>
+                    <h3 style="color: white; font-size: 26px; line-height: 1.2; letter-spacing: -0.5px; margin-bottom: 16px;">El sistema cuesta menos<br>que un mes de "no saber".</h3>
+                    <p class="cost-callout">Negocio Rentable cuesta $34.900 — pago único. Si tenés un solo producto vendiéndose a pérdida, el sistema se paga solo en menos de un mes. La pregunta no es si te conviene comprarlo. Es cuánto más vas a bancar postergarlo.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PAINS -->
+    <section class="pain-section">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-eyebrow">Para vos si...</span>
+                <h2>6 dolores que conocemos<br>de memoria.</h2>
+                <p class="section-lead">Si te sentís identificado con uno o más, este sistema fue diseñado para vos. Cada dolor tiene una solución concreta adentro del Excel.</p>
+            </div>
+
+            <!-- PAIN 1 -->
+            <div class="pain-block reveal">
+                <div>
+                    <span class="pain-num">Dolor 1</span>
+                    <h3 class="pain-headline">Vendés mucho. Cerrás el mes. Y no sabés cuánto te quedó.</h3>
+                    <p class="pain-text">Trabajás 12 horas, atendés clientes todo el día, ves la plata moverse. Pero a fin de mes mirás el cajón y no entendés si te alcanzó, te sobró o te faltó. La sensación de "vendí mucho" no se traduce en plata real, y eso te tiene corriendo sin saber para dónde.</p>
+                    <div class="solution-box">
+                        <div class="solution-label">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+                            Cómo lo resuelve Negocio Rentable
+                        </div>
+                        <p class="solution-text"><strong>Resultado mensual automático.</strong> Cargás ventas, gastos y costos, y el sistema te calcula la ganancia real del mes. Comparado con el mes anterior. Con margen y porcentaje. Sin fórmulas raras, sin interpretación. <em>El número aparece y entendés.</em></p>
+                    </div>
+                </div>
+                <div class="pain-visual">
+                    <div class="pain-visual-card">
+                        <div style="font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;">Resultado del mes</div>
+                        <div class="visual-row"><span class="label">Ventas totales</span><span class="value in">+$2.450.000</span></div>
+                        <div class="visual-row"><span class="label">Costos directos</span><span class="value out">−$1.460.000</span></div>
+                        <div class="visual-row"><span class="label">Gastos fijos</span><span class="value out">−$378.000</span></div>
+                        <div class="visual-row" style="background: var(--accent-soft); margin: 12px -16px -16px; padding: 14px 16px; border-radius: 0 0 12px 12px;"><span class="label" style="font-weight: 700; color: var(--accent-hover);">💰 Ganancia real</span><span class="value in" style="font-size: 17px;">+$612.000</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAIN 2 -->
+            <div class="pain-block reverse reveal">
+                <div>
+                    <span class="pain-num">Dolor 2</span>
+                    <h3 class="pain-headline">El producto que más vendés es probablemente el que menos te deja.</h3>
+                    <p class="pain-text">No es por mala suerte. Lo más vendido suele ser lo que tiene mejor precio para el cliente — o sea, peor margen para vos. Si nunca calculaste rentabilidad por producto, estás trabajando para venderlo barato. María, una de nuestras clientas, descubrió que dos de sus productos los vendía a pérdida.</p>
+                    <div class="solution-box">
+                        <div class="solution-label">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+                            Cómo lo resuelve Negocio Rentable
+                        </div>
+                        <p class="solution-text"><strong>Costos por producto + margen y rentabilidad por producto.</strong> Cargás los insumos de cada producto y el sistema te muestra el margen real de cada uno. Color verde si ganás, amarillo si está justo, rojo si perdés. <em>En 30 minutos sabés cuál subir de precio, cuál sacar y cuál promocionar.</em></p>
+                    </div>
+                </div>
+                <div class="pain-visual">
+                    <div class="pain-visual-card">
+                        <div style="font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;">Margen por producto</div>
+                        <div class="visual-row"><span class="label">🍞 Pan artesanal</span><span class="value in">+38%</span></div>
+                        <div class="visual-row"><span class="label">🥐 Croissants</span><span class="value in">+32%</span></div>
+                        <div class="visual-row"><span class="label">🍰 Tartas grandes</span><span class="value in">+28%</span></div>
+                        <div class="visual-row"><span class="label">🎂 Tortas chicas</span><span class="value warn">+8%</span></div>
+                        <div class="visual-row"><span class="label">🧁 Cupcakes (¡revisar!)</span><span class="value out">−4%</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAIN 3 -->
+            <div class="pain-block reveal">
+                <div>
+                    <span class="pain-num">Dolor 3</span>
+                    <h3 class="pain-headline">No tenés idea cuánto necesitás vender para no perder.</h3>
+                    <p class="pain-text">El número se llama "punto de equilibrio" y es el monto mínimo de ventas que cubre todos tus costos fijos y variables. Si lo superás, ganás. Si no llegás, perdés. Sin saberlo, vendés a ciegas — sin saber si tu mes va bien o mal hasta que ya pasó.</p>
+                    <div class="solution-box">
+                        <div class="solution-label">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+                            Cómo lo resuelve Negocio Rentable
+                        </div>
+                        <p class="solution-text"><strong>Punto de equilibrio automático con tracker mensual.</strong> El sistema calcula tu punto de equilibrio en base a tus costos fijos y márgenes. Y a medida que cargás ventas, te muestra una barra de progreso: "vas en $1.4M de los $1.8M que necesitás". <em>Sabés todo el mes en qué andás.</em></p>
+                    </div>
+                </div>
+                <div class="pain-visual">
+                    <div class="pain-visual-card">
+                        <div style="font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;">Punto de equilibrio</div>
+                        <div style="text-align: center; margin-bottom: 20px;">
+                            <div style="font-size: 13px; color: var(--text-muted);">Necesitás vender este mes</div>
+                            <div style="font-size: 32px; font-weight: 800; color: var(--accent-hover); letter-spacing: -1px; margin: 4px 0;">$1.800.000</div>
+                        </div>
+                        <div style="margin-bottom: 12px;">
+                            <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px;"><strong>Vas en</strong><span style="color: var(--emerald); font-weight: 700;">$2.450.000 (136%)</span></div>
+                            <div style="height: 12px; background: var(--bg); border-radius: 6px; overflow: hidden; position: relative;">
+                                <div style="height: 100%; width: 100%; background: var(--emerald); border-radius: 6px;"></div>
+                                <div style="position: absolute; left: 73%; top: -2px; height: 16px; width: 2px; background: var(--accent-hover);"></div>
+                            </div>
+                            <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px; text-align: right;">↑ Punto de equilibrio</div>
+                        </div>
+                        <div style="font-size: 13px; color: var(--emerald); font-weight: 600; text-align: center; margin-top: 12px;">✓ Superaste el punto, todo lo demás es ganancia.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAIN 4 -->
+            <div class="pain-block reverse reveal">
+                <div>
+                    <span class="pain-num">Dolor 4</span>
+                    <h3 class="pain-headline">Tenés cuatro Excel, dos cuadernos y notas en el celular.</h3>
+                    <p class="pain-text">Uno tiene las ventas. Otro los gastos. El cuaderno tiene proveedores. Las notas del celu tienen los pagos pendientes. A fin de mes querés cruzar todo y te tarda dos tardes. Y nunca te termina de cuadrar. Estás haciendo trabajo de contador sin serlo.</p>
+                    <div class="solution-box">
+                        <div class="solution-label">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+                            Cómo lo resuelve Negocio Rentable
+                        </div>
+                        <p class="solution-text"><strong>Una sola planilla con todo integrado.</strong> Caja diaria, ventas, gastos, stock, costos, deudas, ganancia mensual — todo en un solo archivo. Cargás 15 minutos por mes y el sistema arma el cierre automáticamente. <em>No más cruzar planillas a mano.</em></p>
+                    </div>
+                </div>
+                <div class="pain-visual">
+                    <div class="pain-visual-card">
+                        <div style="font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;">Pestañas del sistema</div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                            <div style="padding: 10px; background: var(--bg); border-radius: 8px; font-size: 13px; font-weight: 600; text-align: center;">📊 Dashboard</div>
+                            <div style="padding: 10px; background: var(--bg); border-radius: 8px; font-size: 13px; font-weight: 600; text-align: center;">💰 Caja diaria</div>
+                            <div style="padding: 10px; background: var(--bg); border-radius: 8px; font-size: 13px; font-weight: 600; text-align: center;">🛒 Ventas</div>
+                            <div style="padding: 10px; background: var(--bg); border-radius: 8px; font-size: 13px; font-weight: 600; text-align: center;">📦 Stock</div>
+                            <div style="padding: 10px; background: var(--bg); border-radius: 8px; font-size: 13px; font-weight: 600; text-align: center;">💸 Gastos</div>
+                            <div style="padding: 10px; background: var(--bg); border-radius: 8px; font-size: 13px; font-weight: 600; text-align: center;">⚖️ Costos</div>
+                            <div style="padding: 10px; background: var(--bg); border-radius: 8px; font-size: 13px; font-weight: 600; text-align: center;">📈 Margen</div>
+                            <div style="padding: 10px; background: var(--accent-soft); color: var(--accent-hover); border-radius: 8px; font-size: 13px; font-weight: 700; text-align: center;">🎯 Resultado</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAIN 5 -->
+            <div class="pain-block reveal">
+                <div>
+                    <span class="pain-num">Dolor 5</span>
+                    <h3 class="pain-headline">Mezclás plata del negocio con la personal y a fin de mes no aparece.</h3>
+                    <p class="pain-text">Sacás del cajón para pagar el supermercado. Cobrás un cliente y lo dejás en tu billetera personal. Lo del negocio y lo tuyo es la misma cosa. A fin de año descubrís que te llevaste el doble de lo que el negocio podía bancar — y no podés explicar por qué te falta plata.</p>
+                    <div class="solution-box">
+                        <div class="solution-label">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+                            Cómo lo resuelve Negocio Rentable
+                        </div>
+                        <p class="solution-text"><strong>Categoría "retiros del dueño" con totalizador.</strong> Cada vez que sacás plata para vos, queda registrado. El sistema te muestra cuánto te llevaste cada mes y vs. lo que el negocio podía bancar. <em>Si querés además ordenar tu plata personal, el sistema Finanzas Claras complementa perfectamente — combo con 25% off.</em></p>
+                    </div>
+                </div>
+                <div class="pain-visual">
+                    <div class="pain-visual-card">
+                        <div style="font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;">Retiros del dueño</div>
+                        <div class="visual-row"><span class="label">Sueldo definido</span><span class="value neutral">$300.000</span></div>
+                        <div class="visual-row"><span class="label">Retiros extra del mes</span><span class="value out">$280.000</span></div>
+                        <div class="visual-row"><span class="label">Total retirado</span><span class="value warn">$580.000</span></div>
+                        <div class="visual-row"><span class="label">Lo que el negocio bancaba</span><span class="value in">$420.000</span></div>
+                        <div class="visual-row" style="background: #fee2e2; margin: 12px -16px -16px; padding: 14px 16px; border-radius: 0 0 12px 12px;"><span class="label" style="font-weight: 700; color: #991b1b;">⚠️ Sacaste de más</span><span class="value out" style="color: #991b1b;">−$160.000</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAIN 6 -->
+            <div class="pain-block reverse reveal">
+                <div>
+                    <span class="pain-num">Dolor 6</span>
+                    <h3 class="pain-headline">Decís "lo arreglo el mes que viene" desde hace seis meses.</h3>
+                    <p class="pain-text">El problema no es que no quieras ordenarte. Es que cada vez que te ponés, te trabás. Excel te asusta. Los cursos son largos. Los contadores son caros. Y postergar tiene un costo que no ves: cada mes que pasa es un mes más de decisiones a ciegas y plata perdida en silencio.</p>
+                    <div class="solution-box">
+                        <div class="solution-label">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+                            Cómo lo resuelve Negocio Rentable
+                        </div>
+                        <p class="solution-text"><strong>Tutorial en video de 60 min + ejemplo cargado + soporte WhatsApp 60 días con Fede.</strong> No te puede salir mal: el sistema viene armado, vas con el video, y si te trabás en algo me escribís y te ayudo a destrabarlo en el momento. <em>Sebastián tenía nivel cero de Excel y en una tarde ya tenía todo cargado.</em></p>
+                    </div>
+                </div>
+                <div class="pain-visual">
+                    <div class="pain-visual-card">
+                        <div style="font-size: 12px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px;">Tu primer día</div>
+                        <div style="margin-bottom: 14px;">
+                            <div style="display: flex; gap: 12px; align-items: flex-start; padding: 12px; background: var(--bg); border-radius: 8px;">
+                                <div style="width: 28px; height: 28px; background: var(--accent); color: var(--bg-dark); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px; flex-shrink: 0;">1</div>
+                                <div><strong style="font-size: 13px;">9:00</strong><div style="font-size: 12.5px; color: var(--text-muted);">Recibís el archivo + tutorial</div></div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 14px;">
+                            <div style="display: flex; gap: 12px; align-items: flex-start; padding: 12px; background: var(--bg); border-radius: 8px;">
+                                <div style="width: 28px; height: 28px; background: var(--accent); color: var(--bg-dark); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px; flex-shrink: 0;">2</div>
+                                <div><strong style="font-size: 13px;">9:30</strong><div style="font-size: 12.5px; color: var(--text-muted);">Mirás el video y vas haciendo</div></div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom: 14px;">
+                            <div style="display: flex; gap: 12px; align-items: flex-start; padding: 12px; background: var(--bg); border-radius: 8px;">
+                                <div style="width: 28px; height: 28px; background: var(--accent); color: var(--bg-dark); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px; flex-shrink: 0;">3</div>
+                                <div><strong style="font-size: 13px;">10:30</strong><div style="font-size: 12.5px; color: var(--text-muted);">Cargás tu primer mes</div></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div style="display: flex; gap: 12px; align-items: flex-start; padding: 12px; background: var(--accent-soft); border-radius: 8px;">
+                                <div style="width: 28px; height: 28px; background: var(--bg-dark); color: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 12px; flex-shrink: 0;">✓</div>
+                                <div><strong style="font-size: 13px; color: var(--accent-hover);">11:00</strong><div style="font-size: 12.5px; color: #92400e;">Tus números claros, listo.</div></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHAT'S INCLUDED -->
+    <section class="included-section">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-eyebrow">Lo que viene adentro</span>
+                <h2>Todo lo que recibís cuando comprás.</h2>
+                <p class="section-lead">No es solo un Excel — es un sistema completo con tutorial, ejemplo cargado y soporte humano por WhatsApp con Fede.</p>
+            </div>
+            <div class="included-grid reveal">
+                <div class="included-item">
+                    <div class="included-item-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+                    <h3>Sistema Excel completo</h3>
+                    <p>Archivo .xlsx listo para usar en Excel o Google Sheets. Caja, ventas, stock, costos, margen, punto de equilibrio.</p>
+                </div>
+                <div class="included-item">
+                    <div class="included-item-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/></svg></div>
+                    <h3>Tutorial en video (60 min)</h3>
+                    <p>Te explico paso a paso cada pestaña, qué cargar dónde, y cómo leer cada número. Para que no quede nada en el aire.</p>
+                </div>
+                <div class="included-item">
+                    <div class="included-item-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div>
+                    <h3>Soporte WhatsApp 60 días</h3>
+                    <p>Si te trabás con algo, me escribís y te ayudo yo. Persona real, no bot. Después podés extender el soporte si querés.</p>
+                </div>
+                <div class="included-item">
+                    <div class="included-item-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>
+                    <h3>Ejemplo cargado</h3>
+                    <p>Viene con un caso real adentro (panadería) para que veas exactamente cómo funciona antes de cargar tus datos.</p>
+                </div>
+                <div class="included-item">
+                    <div class="included-item-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+                    <h3>Punto de equilibrio automático</h3>
+                    <p>El número exacto de ventas que necesitás para no perder. Calculado automáticamente y con tracker de avance del mes.</p>
+                </div>
+                <div class="included-item">
+                    <div class="included-item-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg></div>
+                    <h3>Margen y rentabilidad por producto</h3>
+                    <p>Sabés exactamente cuánto te deja cada producto. Verde si ganás, rojo si perdés. La info que cambia decisiones.</p>
+                </div>
+                <div class="included-item">
+                    <div class="included-item-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg></div>
+                    <h3>Gestión de stock</h3>
+                    <p>Control de stock con alertas de reposición. Sabés qué te queda, qué pedir, y cuándo. Sin sorpresas en góndola.</p>
+                </div>
+                <div class="included-item">
+                    <div class="included-item-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L4 7v6c0 5 3.5 9 8 10 4.5-1 8-5 8-10V7l-8-5z"/></svg></div>
+                    <h3>Garantía 7 días total</h3>
+                    <p>Si en 7 días no te convence, me escribís y te devuelvo el 100%. Sin preguntas, sin letra chica.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW TO USE -->
+    <section class="how-section">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-eyebrow">Cómo se usa</span>
+                <h2>De confundido a claro<br>en 4 pasos.</h2>
+            </div>
+            <div class="how-grid reveal">
+                <div class="how-step">
+                    <div class="how-num">1</div>
+                    <h4>Comprás y recibís</h4>
+                    <p>Pagás por MercadoPago o transferencia. Te llega todo al mail en menos de 5 minutos.</p>
+                </div>
+                <div class="how-step">
+                    <div class="how-num">2</div>
+                    <h4>Mirás el tutorial</h4>
+                    <p>60 min con video paso a paso. Vas con el video y vas haciendo. Termina y ya sabés todo.</p>
+                </div>
+                <div class="how-step">
+                    <div class="how-num">3</div>
+                    <h4>Cargás tu mes actual</h4>
+                    <p>Ventas, gastos, costos por producto. La primera vez te lleva una hora. Después, 15 min/mes.</p>
+                </div>
+                <div class="how-step">
+                    <div class="how-num">4</div>
+                    <h4>Ves tus números</h4>
+                    <p>El dashboard se arma solo. Sabés tu ganancia real, qué producto te deja y cuál te hace perder.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="testimonials-section" id="testimonios">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-eyebrow">Casos reales</span>
+                <h2>Emprendedores que pasaron<br>del caos al control.</h2>
+                <p class="section-lead">Cuatro casos reales de personas que ya están trabajando con sus números claros.</p>
+            </div>
+            <div class="test-grid reveal">
+                <div class="test-card">
+                    <div class="test-stars">★★★★★</div>
+                    <p class="test-quote">"Vendía mucho, todo el día con clientes, pero a fin de mes no quedaba nada. Cuando empecé a usar el sistema me di cuenta que dos productos los estaba vendiendo casi a pérdida."</p>
+                    <div class="test-author">
+                        <div class="test-avatar">MR</div>
+                        <div>
+                            <div class="test-name">María R.</div>
+                            <div class="test-role">Pastelería · Córdoba</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="test-card">
+                    <div class="test-stars">★★★★★</div>
+                    <p class="test-quote">"Tenía cinco planillas distintas, dos cuadernos y notas en el celu. Ahora cargo todo en un solo lugar y a fin de mes sé exactamente cuánto gané. Cambió la cabeza con la que veo el negocio."</p>
+                    <div class="test-author">
+                        <div class="test-avatar">JL</div>
+                        <div>
+                            <div class="test-name">Juan L.</div>
+                            <div class="test-role">Local de indumentaria · Mendoza</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="test-card">
+                    <div class="test-stars">★★★★★</div>
+                    <p class="test-quote">"Lo que más me sirvió fue el punto de equilibrio. Saber exactamente cuánto necesito facturar para no perder me ordenó toda la cabeza. Antes vendía sin saber si me alcanzaba."</p>
+                    <div class="test-author">
+                        <div class="test-avatar">CM</div>
+                        <div>
+                            <div class="test-name">Carolina M.</div>
+                            <div class="test-role">Estudio contable · CABA</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="test-card">
+                    <div class="test-stars">★★★★★</div>
+                    <p class="test-quote">"Pensé que iba a ser complicado por mi nivel de Excel (cero), pero el tutorial es buenísimo. En una tarde ya tenía todo cargado. La rentabilidad por producto me voló la cabeza."</p>
+                    <div class="test-author">
+                        <div class="test-avatar">SP</div>
+                        <div>
+                            <div class="test-name">Sebastián P.</div>
+                            <div class="test-role">Cervecería artesanal · Rosario</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICE -->
+    <section class="price-section">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-eyebrow">Pago único</span>
+                <h2>Lo comprás una vez.<br>Es tuyo para siempre.</h2>
+            </div>
+            <div class="price-card reveal">
+                <div class="price-eyebrow">Sistema Negocio Rentable</div>
+                <h3 class="price-title">Para entender tu negocio en serio</h3>
+                <div class="price-value">
+                    <span class="amount">$34.900</span>
+                    <span class="currency">ARS</span>
+                </div>
+                <span class="price-once-label">✓ Pago único · No es suscripción</span>
+
+                <div class="price-includes">
+                    <h4>Incluye:</h4>
+                    <ul>
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Sistema Excel completo (compatible Google Sheets)</li>
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Tutorial en video paso a paso (60 min)</li>
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Ejemplo cargado para que veas cómo funciona</li>
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Control de caja diaria, ventas, gastos y stock</li>
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Costos por producto + margen + rentabilidad</li>
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Punto de equilibrio automático y tracker</li>
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Resultado mensual y proyección</li>
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Soporte por WhatsApp 60 días con Fede</li>
+                        <li><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>Actualizaciones gratis de por vida</li>
+                    </ul>
+                </div>
+
+                <a href="https://wa.me/5491100000000?text=Hola%2C%20quiero%20Negocio%20Rentable" class="btn btn-accent btn-lg price-cta">Comprar Negocio Rentable →</a>
+                <div class="price-meta">MercadoPago · Transferencia · Tarjeta · Recibís todo en 5 minutos</div>
+            </div>
+
+            <div class="guarantee-bar reveal">
+                <div class="guarantee-bar-seal"><div>7</div><div style="font-size: 9px; letter-spacing: 1px;">DÍAS</div></div>
+                <div class="guarantee-bar-text">
+                    <strong>Garantía total de 7 días</strong>
+                    <span>Si no cambia cómo ves tu negocio, te devuelvo el 100%. Sin preguntas raras ni letra chica.</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq" id="preguntas">
+        <div class="container">
+            <div class="section-header reveal">
+                <span class="section-eyebrow">Preguntas frecuentes</span>
+                <h2>Lo que más nos preguntan<br>sobre Negocio Rentable.</h2>
+            </div>
+            <div class="faq-list reveal">
+                <details class="faq-item">
+                    <summary class="faq-q">¿Sirve para mi rubro?</summary>
+                    <div class="faq-a">Lo usan emprendedores de gastronomía, indumentaria, servicios, venta online, kioscos, oficios independientes, profesionales, cervecerías artesanales, peluquerías, talleres. La estructura es flexible y se adapta a productos, servicios o mixto. Si tenés dudas con tu rubro específico, escribime por WhatsApp y te lo confirmo.</div>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-q">Hay plantillas Excel gratis en Google. ¿Para qué pagar?</summary>
+                    <div class="faq-a">Las plantillas gratis son bonitas pero te dejan solo. Acá pagás por: tutorial en video paso a paso, ejemplo cargado, soporte por WhatsApp con Fede 60 días, fórmulas blindadas para que no las rompas, y un sistema diseñado específicamente para PyMEs argentinas. La diferencia entre plantilla gratis y sistema es exactamente esa: el acompañamiento.</div>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-q">No sé Excel. ¿Voy a poder usarlo?</summary>
+                    <div class="faq-a">Sí. Si sabés escribir un número en una celda, ya sabés lo suficiente. Las fórmulas están armadas y bloqueadas. El tutorial te muestra cada paso. Sebastián, uno de nuestros clientes, dijo "tenía nivel cero de Excel y en una tarde ya tenía todo cargado". Y si te trabás con algo, me escribís por WhatsApp y te ayudo yo en el momento.</div>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-q">¿Y si lo compro y no lo uso?</summary>
+                    <div class="faq-a">Tenés 7 días de garantía total. Si en una semana no le encontrás la vuelta o no es lo que esperabas, me escribís y te devuelvo el 100%. Y más allá de eso: el sistema viene con ejemplo cargado y tutorial guiado para que la primera carga te lleve menos de una hora. La idea es justamente que NO se quede en el cajón.</div>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-q">¿Cuánto tiempo me lleva por mes?</summary>
+                    <div class="faq-a">La primera carga (cuando arrancás) entre 60 y 90 minutos. Después, entre 15 y 30 minutos por mes. Lo ideal es cargar movimientos cada pocos días para que no se acumulen. Con la práctica se vuelve automático — vas a hacerlo sin pensar.</div>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-q">¿Funciona con Google Sheets o solo Excel?</summary>
+                    <div class="faq-a">Funciona perfecto con los dos. El archivo viene en formato Excel (.xlsx) pero podés subirlo a Google Sheets sin perder ninguna funcionalidad. En el tutorial te muestro las dos opciones para que elijas la que más te guste.</div>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-q">¿Hay un solo pago o es suscripción?</summary>
+                    <div class="faq-a">Pago único. Lo comprás una vez y es tuyo para siempre. Las actualizaciones que vayan saliendo te las paso gratis al mismo mail con el que compraste.</div>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-q">¿Por qué cuesta más que Finanzas Claras?</summary>
+                    <div class="faq-a">Negocio Rentable es un sistema más complejo: caja, stock, costos por producto, punto de equilibrio, márgenes, resultado mensual. Tiene más pestañas, más fórmulas, y un tutorial más largo (60 min vs 35 min). También incluye más días de soporte por WhatsApp (60 vs 30). Si tenés ambas necesidades —personal y negocio— te conviene el combo: 25% off.</div>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-q">¿Cómo recibo el sistema?</summary>
+                    <div class="faq-a">Te llega un mail con el archivo Excel, el link al video tutorial y un PDF con la guía rápida. Todo en tu casilla en menos de 5 minutos después del pago confirmado.</div>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-q">¿Qué métodos de pago aceptan?</summary>
+                    <div class="faq-a">MercadoPago (con cuotas sin interés según promoción), transferencia bancaria, y todas las tarjetas. Coordinamos por WhatsApp el método que mejor te quede.</div>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="final-cta">
+        <div class="final-cta-inner">
+            <h2>Hoy es buen día para dejar de perder plata sin saberlo.</h2>
+            <p>$34.900 pago único. Garantía 7 días. Tutorial 60 min. Y si te trabás, te respondo yo por WhatsApp durante 60 días.</p>
+            <a href="https://wa.me/5491100000000?text=Hola%2C%20quiero%20Negocio%20Rentable" class="btn btn-accent btn-lg">Quiero Negocio Rentable →</a>
+            <div class="final-cta-meta"><strong>Pago único</strong> · MercadoPago · Transferencia · Tarjeta · Llega en 5 min al mail</div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="index.html" class="logo">
+                        <div class="logo-mark">TN</div>
+                        <span style="color: white;">Tus Números Claros</span>
+                    </a>
+                    <p>Sistemas simples para que entiendas las finanzas de tu negocio sin volverte loco con Excel ni con cursos eternos.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Sistemas</h4>
+                    <ul>
+                        <li><a href="finanzas-claras.html">Finanzas Claras</a></li>
+                        <li><a href="negocio-rentable.html">Negocio Rentable</a></li>
+                        <li><a href="https://wa.me/5491100000000">Combo completo</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Recursos</h4>
+                    <ul>
+                        <li><a href="index.html#como-funciona">Cómo funciona</a></li>
+                        <li><a href="#preguntas">Preguntas frecuentes</a></li>
+                        <li><a href="#testimonios">Casos reales</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#">Términos y condiciones</a></li>
+                        <li><a href="#">Política de privacidad</a></li>
+                        <li><a href="#">Política de devoluciones</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>© 2026 Tus Números Claros. Hecho en Argentina.</span>
+                <span>Soporte: <a href="https://wa.me/5491100000000" style="color: var(--accent);">WhatsApp</a></span>
+            </div>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/5491100000000?text=Hola%2C%20quiero%20Negocio%20Rentable" class="whatsapp-float" aria-label="Hablar por WhatsApp">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893A11.821 11.821 0 0020.464 3.488"/></svg>
+    </a>
+
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+        }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+
+</body>
+</html>
